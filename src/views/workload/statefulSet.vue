@@ -1,0 +1,3 @@
+<template>
+    statefulset
+</template>

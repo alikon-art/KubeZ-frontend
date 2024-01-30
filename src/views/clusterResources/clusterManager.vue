@@ -1,0 +1,4 @@
+<template>
+    clusterManager
+
+</template>

@@ -1,0 +1,3 @@
+<template>
+    endpoints
+</template>
