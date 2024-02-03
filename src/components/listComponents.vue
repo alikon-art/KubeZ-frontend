@@ -29,9 +29,14 @@
 <script setup>
 import {  onMounted, reactive, ref } from "vue";
 import labelsComponents from './labelsComponents.vue'
-import { UsePostStore } from "../utils/pinia/myStore.vue";
+import { UsePostStore } from "../utils/pinia/postStore.vue";
 import { storeToRefs } from "pinia";
+import { useRouter } from 'vue-router'
 
+
+
+// 使用路由
+const router = useRouter()
 
 // 使用存储库
 const postStore  =  UsePostStore()
@@ -56,7 +61,19 @@ function log (){
 }
 
 const showItemInfo = (row) =>{
-  console.log(row);
+  console.log('row',row,row.name);
+  // postData.value.name = row.name
+  // postData.value.namespace = row.namespace
+  // console.log('postdata',postData.value);
+  // router.push({path:'detailsComponents',query:{userid:'123'}})
+  router.push({
+    path:'podDetailsComponents',
+    query:{
+      // clusterid:row.clusterid,
+      namespace:row.namespace,
+      name:row.name,
+    }
+  })
 }
 
 

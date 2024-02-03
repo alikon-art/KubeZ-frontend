@@ -14,6 +14,14 @@
         <el-icon><document /></el-icon>
         <span>testPage</span>
       </el-menu-item>  
+      <el-menu-item index="detailsComponents">
+        <el-icon><document /></el-icon>
+        <span>detailsComponents</span>
+      </el-menu-item> 
+      <el-menu-item index="listComponents">
+        <el-icon><document /></el-icon>
+        <span>listComponents</span>
+      </el-menu-item> 
 
       <!-- 仪表盘 -->
       <el-menu-item index="dashboard">

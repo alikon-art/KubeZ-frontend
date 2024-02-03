@@ -5,6 +5,16 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/listComponents',
+      name: 'listComponents',
+      component: () => import('../components/listComponents.vue')
+    },
+    {
+      path: '/podDetailsComponents',
+      name: 'podDetailsComponents',
+      component: () => import('../components/pod/podDetailsComponents.vue')
+    },
+    {
       path: '/dashboard',
       name: 'home',
       component: () => import('../views/dashboard/dashboard.vue')

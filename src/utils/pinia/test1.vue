@@ -12,7 +12,7 @@
 
 <script setup>
 
-    import { UsePostStore } from "./myStore.vue";
+    import { UsePostStore } from "./postStore.vue";
     import { storeToRefs } from "pinia";
     
 
