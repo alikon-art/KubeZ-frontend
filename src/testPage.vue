@@ -13,8 +13,8 @@
     <axiostest></axiostest> -->
         <!-- <el-divider>listCompenents</el-divider>
         <listCompenents></listCompenents> -->
-    <el-divider>listTest</el-divider>
-    <listTest></listTest>
+    <!-- <el-divider>listTest</el-divider>
+    <listTest></listTest> -->
     <!-- <el-divider>pinia</el-divider>
     <store></store> -->
     <el-divider>detailtest</el-divider>

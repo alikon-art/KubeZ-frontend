@@ -42,7 +42,7 @@ const router = useRouter()
 const postStore  =  UsePostStore()
 
 // 从存储中加载数据
-const { postData ,response } = storeToRefs(postStore)
+const { postUrl,postData ,response } = storeToRefs(postStore)
 
 // 初始化数据
 const res = postStore.response
@@ -50,9 +50,12 @@ const tableData = reactive([])
 
 // 在挂载时发起网络请求
 onMounted(async () => {
+  postUrl.value = '/pod/list'
   await postStore.SendQuerry()
   // console.log('response', response.value.data.items,typeof(response));
-  tableData.push(...response.value.data.items)
+  if (response.value.data.items && response.value.data.items.length > 0) {
+    tableData.push(...response.value.data.items)
+  }else{}
 })
 
 function log (){

@@ -15,3 +15,10 @@ const user={
 
 // console.log(props.labels);
 </script>
+
+<style>
+.el-tag{
+    margin: 5px;
+}
+
+</style>
