@@ -23,10 +23,17 @@
         },
         // 返回结果中的data字段,list接口为列表,get/update接口为资源详情
         itemData:{
+            // 一般的元数据
             metadata:{
                 name:''
-            }
-
+            },
+            // cluster列表
+            clusters:[],
+        },
+        componentsStatus:{
+            listComponents:{
+                needReload:false,
+            },
         }
     }),
 

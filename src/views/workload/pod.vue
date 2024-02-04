@@ -1,5 +1,5 @@
 <template>
-    pod
+    <clusterAndNamespaceSelecter></clusterAndNamespaceSelecter>
     <listComponents></listComponents>
 </template>
 
@@ -9,7 +9,7 @@
     import { UsePostStore } from "../../utils/pinia/postStore.vue";
     import { storeToRefs } from "pinia";
 
-
+    import clusterAndNamespaceSelecter from "../../components/viewComponents/clusterAndNamespaceSelecter.vue"
 
     const postStore = UsePostStore()
 

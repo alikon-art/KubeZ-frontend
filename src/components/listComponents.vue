@@ -1,4 +1,5 @@
 <template>
+  <el-card shadow="hover" style="margin-top: 20px;">
   <el-table :data="tableData" stripe style="width: 100%">
     <el-table-column prop="clusterid" label="集群id"  />
     <el-table-column prop="name" label="资源名称"  />
@@ -22,18 +23,17 @@
 
     </el-table-column>
   </el-table>
-  <button @click="log">log</button>
+  <!-- <button @click="log">log</button> -->
+</el-card>
 </template>
 
 
 <script setup>
-import {  onMounted, reactive, ref } from "vue";
+import {  onMounted, reactive, ref,watchEffect } from "vue";
 import labelsComponents from './labelsComponents.vue'
 import { UsePostStore } from "../utils/pinia/postStore.vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from 'vue-router'
-
-
 
 // 使用路由
 const router = useRouter()
@@ -42,7 +42,7 @@ const router = useRouter()
 const postStore  =  UsePostStore()
 
 // 从存储中加载数据
-const { postUrl,postData ,response } = storeToRefs(postStore)
+const { postUrl,postData ,response,componentsStatus } = storeToRefs(postStore)
 
 // 初始化数据
 const res = postStore.response
@@ -50,13 +50,18 @@ const tableData = reactive([])
 
 // 在挂载时发起网络请求
 onMounted(async () => {
+  reload()
+})
+
+// 重新加载数据
+async function reload(){
   postUrl.value = '/pod/list'
   await postStore.SendQuerry()
   // console.log('response', response.value.data.items,typeof(response));
   if (response.value.data.items && response.value.data.items.length > 0) {
     tableData.push(...response.value.data.items)
   }else{}
-})
+}
 
 function log (){
   console.log('response',response.value);
@@ -85,45 +90,14 @@ const deleteItem = (row) =>{
 }
 
 
-
-// // 要传入的数据
-// const props = defineProps({
-//   clusterid:{
-//     type: String,
-//     default: 'cluster1'
-//   },
-//   namespace:{
-//     type: String,
-//     default: 'default'
-//   },
-//   url:{
-//     type: String,
-//     required: true,
-//     default: 'pod/list'
-//   },
-// });
-
-// // 构建请求体
-// let postData = reactive({
-//   clusterid: props.clusterid,
-//   namespace: props.namespace,
-// });
-
-// // 请求url
-// let posturl = ref(props.url)
-
-// // 初始化表格数据
-// let tableData = reactive([]);
-
-
-// // 发送请求
-// function getinfo(){
-//   axiosInstance.post(posturl.value,postData).then(function (response) {
-//       // console.log(response.data.data);
-//       tableData.push(...response.data.data.items)
-//       // console.log(tableData); 
-//   })
-// }
-
-
+// 监听状态变化
+ watchEffect(() => {
+  if (componentsStatus.value.listComponents.needReload) {
+    // 清空列表数据
+    tableData.splice(0,tableData.length)
+    reload()
+    componentsStatus.value.listComponents.needReload = false
+  }
+  console.log('needReload改变了',componentsStatus.value.listComponents.needReload);
+})
 </script>
