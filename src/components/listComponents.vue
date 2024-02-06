@@ -33,10 +33,14 @@ import {  onMounted, reactive, ref,watchEffect } from "vue";
 import labelsComponents from './labelsComponents.vue'
 import { UsePostStore } from "../utils/pinia/postStore.vue";
 import { storeToRefs } from "pinia";
-import { useRouter } from 'vue-router'
+import { useRouter,useRoute } from 'vue-router'
 
 // 使用路由
 const router = useRouter()
+const route = useRoute()
+
+// 获取不带/的当前url
+const currentUrl = ref(route.path.replace('/',''))
 
 // 使用存储库
 const postStore  =  UsePostStore()
@@ -55,7 +59,7 @@ onMounted(async () => {
 
 // 重新加载数据
 async function reload(){
-  postUrl.value = '/pod/list'
+  postUrl.value = '/'+currentUrl.value+'/list'
   await postStore.SendQuerry()
   // console.log('response', response.value.data.items,typeof(response));
   if (response.value.data.items && response.value.data.items.length > 0) {
@@ -75,7 +79,7 @@ const showItemInfo = (row) =>{
   // console.log('postdata',postData.value);
   // router.push({path:'detailsComponents',query:{userid:'123'}})
   router.push({
-    path:'podDetailsComponents',
+    path:currentUrl.value+'DetailsComponents',
     query:{
       // clusterid:row.clusterid,
       namespace:row.namespace,

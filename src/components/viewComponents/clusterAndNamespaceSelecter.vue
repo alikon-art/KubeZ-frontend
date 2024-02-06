@@ -30,6 +30,8 @@
   <!-- {{ namespaces }} -->
   
 <el-button @click="reloadList">确定</el-button>
+<!-- 当前url就是资源名称 -->
+<el-button @click="createItem">创建{{ currentUrl }}</el-button>
 </el-card>
 
 
@@ -42,6 +44,22 @@ import { onMounted, ref,watchEffect} from 'vue'
 import { UsePostStore } from "../../utils/pinia/postStore.vue";
 import { storeToRefs } from "pinia";
 // import { reload} from '../listComponents.vue';
+
+
+import { useRouter,useRoute } from 'vue-router'
+const router = useRouter()
+const route = useRoute()
+
+
+// 获取不带/的当前url
+const currentUrl = ref(route.path.replace('/',''))
+
+
+
+const createItem= () => {
+    console.log('route to ','/'+currentUrl.value+'CreateComponents');
+    router.push({path:'/'+currentUrl.value+'CreateComponents'})
+}
 
 
 // 使用存储库
@@ -83,6 +101,7 @@ function clusteridChange(e) {
 function namespaceChange(e) {
     postData.value.namespace = e
     console.log('postdata-namespace改变了',postData.value.namespace)
+    reloadList()
 }
 
 

@@ -15,6 +15,21 @@ const router = createRouter({
       component: () => import('../components/pod/podDetailsComponents.vue')
     },
     {
+      path: '/deploymentDetailsComponents',
+      name: 'deploymentDetailsComponents',
+      component: () => import('../components/deployment/deploymentDetailsComponents.vue')
+    },
+    {
+      path: '/deploymentCreateComponents',
+      name: 'deploymentCreateComponents',
+      component: () => import('../components/deployment/deploymentCreateComponents.vue')
+    },
+    {
+      path: '/podCreateComponents',
+      name: 'podCreateComponents',
+      component: () => import('../components/pod/podCreatecomponents.vue')
+    },
+    {
       path: '/dashboard',
       name: 'home',
       component: () => import('../views/dashboard/dashboard.vue')

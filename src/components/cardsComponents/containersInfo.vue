@@ -1,6 +1,7 @@
 <template>
+<el-card  header="Container详情" style="margin-top:20px">
 <el-row>
-    <el-col v-for="container in props.containers" :key="container.name" >
+    <el-col v-for="container in props.containers" :key="container.name"  :span="12">
         <el-card shadow="hover" style="margin-bottom:16px" >
             <h3 style="margin-bottom: 10px;">{{ container.name }}</h3>
             <el-descriptions  column="1">
@@ -37,6 +38,7 @@
         </el-card>
     </el-col>
 </el-row>
+</el-card>
 </template>
 
 

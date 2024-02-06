@@ -9,6 +9,17 @@
         <el-descriptions-item  label="hostIP">{{ itemData.status?.hostIP }}</el-descriptions-item>
         <el-descriptions-item  label="启动时间">{{ itemData.status?.startTime }}</el-descriptions-item>
         <el-descriptions-item label="qosClass">{{ itemData.status?.qosClass }}</el-descriptions-item>
+        <el-descriptions-item label="observedGeneration">{{ itemData.status?.observedGeneration }}</el-descriptions-item>
+        <el-descriptions-item label="readyReplicas">{{ itemData.status?.readyReplicas }}</el-descriptions-item>
+        <el-descriptions-item label="replicas">{{ itemData.status?.replicas }}</el-descriptions-item>
+        <el-descriptions-item label="unavailableReplicas">{{ itemData.status?.unavailableReplicas }}</el-descriptions-item>
+        <el-descriptions-item label="updatedReplicas">{{ itemData.status?.updatedReplicas }}</el-descriptions-item>
+        <template v-if="itemData.status?.conditions">
+            <el-descriptions-item label="conditions">
+                <conditions :conditions="itemData.status.conditions"></conditions>
+            </el-descriptions-item>
+        </template>
+            
         
 
       </el-descriptions>
@@ -23,6 +34,7 @@
         import { UsePostStore } from "../../utils/pinia/postStore.vue";
         import { storeToRefs } from "pinia";
         import labelsComponents from '../labelsComponents.vue'
+        import conditions from './conditions.vue'
     
     
         const postStore = UsePostStore()

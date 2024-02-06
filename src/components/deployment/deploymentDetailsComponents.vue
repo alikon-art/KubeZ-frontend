@@ -2,9 +2,10 @@
 
     <basicInfo></basicInfo>
     <status></status>
-    <podInfoCard></podInfoCard>
-    <containersInfo  :containers="itemData.spec?.containers"></containersInfo>
-    <volumeInfo  :volumes="itemData.spec?.volumes"></volumeInfo>
+    <deploymentInfoCard></deploymentInfoCard>
+    <containersInfo  :containers="itemData.spec?.template?.spec?.containers"></containersInfo>
+    <volumeInfo></volumeInfo>
+    
 
 
 
@@ -19,7 +20,7 @@
 
     import basicInfo from "../cardsComponents/basicInfo.vue"
     import status from "../cardsComponents/status.vue"
-    import podInfoCard from "./podInfoCard.vue"
+    import deploymentInfoCard from "./deploymentInfoCard.vue"
     import containersInfo from '../cardsComponents/containersInfo.vue'
     import volumeInfo from '../cardsComponents/volumeInfo.vue'
     
@@ -31,7 +32,7 @@
 
     // 挂载时发起网络请求
     onMounted(async () =>{
-        postUrl.value='/pod/get'
+        postUrl.value='/deployment/get'
         if (route.query.name != null) {
             postData.value.name = route.query.name
             postData.value.namespace = route.query.namespace

@@ -4,7 +4,7 @@
         <el-col  >
         <el-card shadow="always" header="Pod详情">
         <el-descriptions  column="2">
-            <el-descriptions-item label="Node名称"">{{ itemData.spec?.nodeName }}</el-descriptions-item>
+            <el-descriptions-item label="Node名称">{{ itemData.spec?.nodeName }}</el-descriptions-item>
             <el-descriptions-item label="重启策略">{{ itemData.spec?.restartPolicy }}</el-descriptions-item>
             <el-descriptions-item label="DNS策略">{{ itemData.spec?.dnsPolicy }}</el-descriptions-item>
             <el-descriptions-item label="服务账户">{{ itemData.spec?.serviceAccountName }}</el-descriptions-item>
@@ -43,11 +43,7 @@
             </el-collapse>  
         </el-card >
 
-            <el-card v-if="itemData.spec?.containers" header="容器详情" style="margin-top:20px">
-                <template #default="scope">
-                <containersInfo  :containers="itemData.spec?.containers"></containersInfo>
-                </template>
-            </el-card>
+           
         </el-col>
       </el-row>
     </template>
@@ -59,7 +55,8 @@
         import { storeToRefs } from "pinia";
 
         import labelsComponents from '../labelsComponents.vue'
-        import containersInfo from './containersInfo.vue'
+        import containersInfo from '../cardsComponents/containersInfo.vue'
+        import volumeInfo from '../cardsComponents/volumeInfo.vue'
     
     
         const postStore = UsePostStore()

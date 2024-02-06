@@ -1,7 +1,12 @@
 <template>
 <el-row >
     <el-col  >
-    <el-card shadow="always" style="margin-bottom:16px" ><h3>{{ itemData.metadata?.name }}</h3></el-card>
+    <el-card shadow="always" style="margin-bottom:16px" >
+        <h3>{{ itemData.metadata?.name }}</h3>
+        <el-button    @click="showYaml">查看Yaml</el-button>
+        <el-button    @click="showEdit">日志</el-button>
+        <el-button    @click="deleteItem">删除</el-button>
+    </el-card>
     <el-card shadow="always" header="基本信息"> 
     <el-descriptions  column="2">
         <el-descriptions-item label="名称">{{ itemData.metadata?.name }}</el-descriptions-item>
@@ -13,6 +18,7 @@
             <labelsComponents  :labels="itemData.metadata?.labels"></labelsComponents>
             </template>
         </el-descriptions-item>
+        <el-descriptions-item label="uid">{{ itemData.metadata?.uid }}</el-descriptions-item>
 
         <!-- 注解展示出来不好看,以后再调整
         <el-descriptions-item label="注解" v-if="itemData.metadata?.annotations" >
