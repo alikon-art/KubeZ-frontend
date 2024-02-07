@@ -13,7 +13,8 @@
 
 
 <script setup>
-    import { UsePostStore } from "../../utils/pinia/postStore.vue";
+
+
     import { storeToRefs } from "pinia";
     import { onMounted, ref } from "vue";
     import { useRoute } from 'vue-router'
@@ -24,9 +25,13 @@
     import containersInfo from '../cardsComponents/containersInfo.vue'
     import volumeInfo from '../cardsComponents/volumeInfo.vue'
     
+    import { UsePostStore } from "../../utils/pinia/postStore.vue";
+    
 
     const postStore = UsePostStore()
     const { postData,postUrl,response,itemData } = storeToRefs(postStore)
+
+
     
     const route = useRoute()
 
@@ -47,6 +52,8 @@
         // console.log('itemData:', itemData.value);
     })
     
+
+
 
     
 

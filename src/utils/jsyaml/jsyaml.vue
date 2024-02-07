@@ -4,7 +4,10 @@
     // 将传入数据转换为yaml
     const anyToYaml = (anyobj) =>{
         try {
-        return dump(anyobj);
+        // noRefs: true 不显示引用
+        return dump(anyobj,{
+            noRefs: true
+        });
       } catch (e) {
         console.error('Error converting to YAML:', e);
         return '';

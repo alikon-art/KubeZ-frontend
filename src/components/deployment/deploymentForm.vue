@@ -3,73 +3,33 @@
       ref="ruleFormRef"
       :model="ruleForm"
       :rules="rules"
-      label-width="120px"
+      label-width="140px"
       class="demo-ruleForm"
       :size="formSize"
       status-icon
     >
-      <el-form-item label="Pod名称" prop="name">
-        <el-input v-model="ruleForm.name" />    
-      </el-form-item>
-      <el-form-item label="Activity zone" prop="region">
-        <el-select v-model="ruleForm.region" placeholder="Activity zone">
-          <el-option label="Zone one" value="shanghai" />
-          <el-option label="Zone two" value="beijing" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Activity count" prop="count">
-        <el-select-v2
-          v-model="ruleForm.count"
-          placeholder="Activity count"
-          :options="options"
-        />
-      </el-form-item>
-      <el-form-item label="Activity time" required>
-        <el-col :span="11">
-          <el-form-item prop="date1">
-            <el-date-picker
-              v-model="ruleForm.date1"
-              type="date"
-              label="Pick a date"
-              placeholder="Pick a date"
-              style="width: 100%"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col class="text-center" :span="2">
-          <span class="text-gray-500">-</span>
-        </el-col>
-        <el-col :span="11">
-          <el-form-item prop="date2">
-            <el-time-picker
-              v-model="ruleForm.date2"
-              label="Pick a time"
-              placeholder="Pick a time"
-              style="width: 100%"
-            />
-          </el-form-item>
-        </el-col>
-      </el-form-item>
-      <el-form-item label="Instant delivery" prop="delivery">
-        <el-switch v-model="ruleForm.delivery" />
-      </el-form-item>
-      <el-form-item label="Activity type" prop="type">
-        <el-checkbox-group v-model="ruleForm.type">
-          <el-checkbox label="Online activities" name="type" />
-          <el-checkbox label="Promotion activities" name="type" />
-          <el-checkbox label="Offline activities" name="type" />
-          <el-checkbox label="Simple brand exposure" name="type" />
-        </el-checkbox-group>
-      </el-form-item>
-      <el-form-item label="Resources" prop="resource">
-        <el-radio-group v-model="ruleForm.resource">
-          <el-radio label="Sponsorship" />
-          <el-radio label="Venue" />
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="Activity form" prop="desc">
-        <el-input v-model="ruleForm.desc" type="textarea" />
-      </el-form-item>
+    <el-form-item label="deployment名称" prop="deploymentName">
+    <el-input v-model="ruleForm.deploymentName" />    
+    </el-form-item>
+
+    <el-form-item label="副本数" prop="replicas">
+        <el-slider v-model="ruleForm.replicas" :step="1" show-stops :max="10" show-input/>
+    </el-form-item>
+
+      <el-form-item label="Dns策略" prop="dnsPolicy">
+      <el-select v-model="ruleForm.dnsPolicy" >
+        <el-option  value="ClusterFirst" />
+        <el-option  value="ClusterFirstWithHostNet" />
+        <el-option  value="None" />
+      </el-select>
+    </el-form-item>
+
+    <el-form-item label="使用主机网络" prop="hostNetwork">
+        <el-switch v-model="ruleForm.hostNetwork" />
+    </el-form-item>
+
+ 
+
       <el-form-item>
         <el-button type="primary" @click="submitForm(ruleFormRef)">
           Create
@@ -80,109 +40,84 @@
   </template>
   
   <script lang="ts" setup>
-  import { reactive, ref } from 'vue'
-  import type { FormInstance, FormRules } from 'element-plus'
+    import { reactive, ref } from 'vue'
+    import type { FormInstance, FormRules } from 'element-plus'
+
+    // 导入pinia存储库
+    import { useDeploymentStore } from "@/model/deploymentStore.vue";
+    import { storeToRefs } from "pinia";
+
+    // 加载deployment存储库
+    const deploymentStore = useDeploymentStore()
+    const { deployment } = storeToRefs(deploymentStore)
+
   
-  interface RuleForm {
-    name: string
-    region: string
-    count: string
-    date1: string
-    date2: string
-    delivery: boolean
-    type: string[]
-    resource: string
-    desc: string
-  }
-  
-  const formSize = ref('default')
-  const ruleFormRef = ref<FormInstance>()
-  const ruleForm = reactive<RuleForm>({
-    name: 'Hello',
-    region: '',
-    count: '',
-    date1: '',
-    date2: '',
-    delivery: false,
-    type: [],
-    resource: '',
-    desc: '',
-  })
-  
-  const rules = reactive<FormRules<RuleForm>>({
-    name: [
-      { required: true, message: 'Please input Activity name', trigger: 'blur' },
-      { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
-    ],
-    region: [
-      {
-        required: true,
-        message: 'Please select Activity zone',
-        trigger: 'change',
-      },
-    ],
-    count: [
-      {
-        required: true,
-        message: 'Please select Activity count',
-        trigger: 'change',
-      },
-    ],
-    date1: [
-      {
-        type: 'date',
-        required: true,
-        message: 'Please pick a date',
-        trigger: 'change',
-      },
-    ],
-    date2: [
-      {
-        type: 'date',
-        required: true,
-        message: 'Please pick a time',
-        trigger: 'change',
-      },
-    ],
-    type: [
-      {
-        type: 'array',
-        required: true,
-        message: 'Please select at least one activity type',
-        trigger: 'change',
-      },
-    ],
-    resource: [
-      {
-        required: true,
-        message: 'Please select activity resource',
-        trigger: 'change',
-      },
-    ],
-    desc: [
-      { required: true, message: 'Please input activity form', trigger: 'blur' },
-    ],
-  })
-  
-  const submitForm = async (formEl: FormInstance | undefined) => {
-    if (!formEl) return
-    await formEl.validate((valid, fields) => {
-      if (valid) {
-        console.log('submit!')
-      } else {
-        console.log('error submit!', fields)
-      }
+    interface RuleForm {
+    deploymentName: string
+    replicas: number
+    dnsPolicy: string  
+
+
+    hostNetwork: boolean
+    selector: string
+    imagePullSecrets: string
+
+
+    }
+
+    const formSize = ref('default')
+    const ruleFormRef = ref<FormInstance>()
+
+    const ruleForm = reactive<RuleForm>({
+    deploymentName: '',
+    replicas: 1,
+    dnsPolicy: 'ClusterFirst',
+    hostNetwork: false,
+    selector: '',
+    imagePullSecrets: '',
+
     })
-  }
-  
-  const resetForm = (formEl: FormInstance | undefined) => {
+
+    const rules = reactive<FormRules<RuleForm>>({
+    deploymentName: [
+        { required: true, message: 'Please input Activity name', trigger: 'blur' },
+        // { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
+    ],
+    })
+
+    const submitForm = async (formEl: FormInstance | undefined) => {
+        updateData()
+        if (!formEl) return
+        await formEl.validate((valid, fields) => {
+            if (valid) {
+            console.log('submit!')
+            } else {
+            console.log('error submit!', fields)
+            }
+        })
+    }
+
+    const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.resetFields()
-  }
+    }
   
-  const options = Array.from({ length: 10000 }).map((_, idx) => ({
-    value: `${idx + 1}`,
-    label: `${idx + 1}`,
-  }))
+    const updateData = () => {
+        console.log(ruleForm.deploymentName);
+        
+        // 绑定deploymentName
+        deploymentStore.setDeploymentName(ruleForm.deploymentName)
+        
+        // 绑定replicas
+        deploymentStore.setDeploymentReplicas(ruleForm.replicas)
+        // 绑定dnsPolicy
+        deploymentStore.setDeploymentDnsPolicy(ruleForm.dnsPolicy)
+
+        // 绑定hostNetwork
+        deploymentStore.setDeploymentHostNetwork(ruleForm.hostNetwork)
+
+        
+    }
+
   </script>
   
