@@ -1,20 +1,13 @@
 <template>
     <clusterAndNamespaceSelecter></clusterAndNamespaceSelecter>
 
-    <el-card style="margin-top: 20px;">
-    <deploymentForm></deploymentForm>
+    <deploymentCreateForm></deploymentCreateForm>
+
+    <templateCreateForm></templateCreateForm>
     
-    </el-card>
     
+
     
-    <!-- <el-card style="margin-top: 20px;">
-        <el-input
-        v-model="itemyaml"
-        autosize
-        type="textarea"
-        placeholder="Please input"
-      />
-    </el-card> -->
     <el-button @click="addContainer" >添加容器</el-button>
     <el-button @click="pushTest" >测试</el-button>
     <el-card style="margin-top: 20px;">
@@ -35,8 +28,9 @@
     
     import {anyToYaml} from '../../utils/jsyaml/jsyaml.vue'
 
-    import deploymentForm from './deploymentForm.vue'
+    import deploymentCreateForm from './deploymentCreateForm.vue'
     import clusterAndNamespaceSelecter from '../viewComponents/clusterAndNamespaceSelecter.vue';
+    import templateCreateForm from '../template/templateCreateForm.vue';
     
 
     // 导入pinia存储库
@@ -65,10 +59,6 @@
       templateStore.addContainer()
     
     }
-
-
-  templateStore.addContainer()
-  templateStore.addContainer()
 
     // itemyaml.value = anyToYaml(containers.value)
 

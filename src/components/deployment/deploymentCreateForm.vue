@@ -1,4 +1,5 @@
 <template>
+  <el-card style="margin-top: 20px;">
     <el-form
       ref="ruleFormRef"
       :model="ruleForm"
@@ -37,19 +38,27 @@
         <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
       </el-form-item>
     </el-form>
+  </el-card>
   </template>
   
   <script lang="ts" setup>
-    import { reactive, ref } from 'vue'
+    import { reactive, ref ,watchEffect } from 'vue'
     import type { FormInstance, FormRules } from 'element-plus'
 
     // 导入pinia存储库
     import { useDeploymentStore } from "@/model/deploymentStore.vue";
+    import { UsePostStore } from "../../utils/pinia/postStore.vue";
     import { storeToRefs } from "pinia";
 
     // 加载deployment存储库
     const deploymentStore = useDeploymentStore()
     const { deployment } = storeToRefs(deploymentStore)
+
+    // 加载postdata存储库
+    const postStore  =  UsePostStore()
+    const { postUrl,postData ,response,itemData,componentsStatus } = storeToRefs(postStore)
+
+
 
   
     interface RuleForm {
@@ -118,6 +127,12 @@
 
         
     }
+
+    // 监听postdata.value.namespace的变化
+    watchEffect(() => {
+        console.log('postdata-namespace改变了',postData.value.namespace)
+        deploymentStore.setDeploymentNamespace(postData.value.namespace)
+    })
 
   </script>
   
