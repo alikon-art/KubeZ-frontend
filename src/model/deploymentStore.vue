@@ -9,19 +9,13 @@ const useDeploymentStore = defineStore('deployment',{
         kind: 'Deployment',
         metadata: {
             name: '',
-            labels: {
-                app: '',
-            },
-            annotations: {
-                app: '',
-            },
+            labels: {},
+            annotations: {},
             namespace: 'default',
         },
         spec: {
             selector: {
-                matchLabels: {
-                    app: '',
-                },
+                matchLabels: {},
             },
             replicas: 1,
             strategy: {
@@ -39,11 +33,53 @@ const useDeploymentStore = defineStore('deployment',{
     }),
 
     actions: {
+        // 设置deployment名称
         setDeploymentName(name) {
         this.deployment.metadata.name = name
         this.deployment.metadata.labels.app = name
         this.deployment.metadata.annotations.app = name
         },
+        // 设置label
+        setDeploymentLabels(labels) {
+        this.deployment.metadata.labels = labels
+        },
+        // 删除所有label
+        deleteDeploymentLabels() {
+        this.deployment.metadata.labels = {}
+        },
+
+        // 设置annotations
+        setDeploymentAnnotations(annotations) {
+        this.deployment.metadata.annotations = annotations
+        },
+        // 删除所有annotations
+        deleteDeploymentAnnotations() {
+        this.deployment.metadata.annotations = {}
+        },
+
+        // 设置selector,同时设置template的label
+        setDeploymentSelector(selector) {
+            console.log(selector);
+        this.deployment.spec.selector.matchLabels = selector
+        this.deployment.spec.template.metadata.labels = selector
+        },
+        // 删除所有selector和template的label
+        deleteDeploymentSelector() {
+        this.deployment.spec.selector.matchLabels = {}
+        this.deployment.spec.template.metadata.labels = {}
+        },
+
+        // 设置template的annotations
+        setDeploymentTemplateAnnotations(annotations) {
+        this.deployment.spec.template.metadata.annotations = annotations
+        },
+
+        // 删除所有template的annotations
+        deleteDeploymentTemplateAnnotations() {
+        this.deployment.spec.template.metadata.annotations = {}
+        },
+
+
         setDeploymentNamespace(namespace) {
         this.deployment.metadata.namespace = namespace
         },
@@ -55,11 +91,6 @@ const useDeploymentStore = defineStore('deployment',{
         },
         setDeploymentHostNetwork(hostNetwork) {
             this.deployment.spec.template.spec.hostNetwork = hostNetwork
-        },
-        setDeploymentSelector(selector) {
-            this.deployment.spec.selector.matchLabels.app = selector
-            this.deployment.spec.template.metadata.labels.app = selector
-            this.deployment.spec.template.metadata.annotations.app = selector
         },
         setDeploymentImagePullSecrets(imagePullSecrets) {
             this.deployment.spec.template.spec.imagePullSecrets = imagePullSecrets

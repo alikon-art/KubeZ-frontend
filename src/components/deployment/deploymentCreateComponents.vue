@@ -3,13 +3,16 @@
 
     <deploymentCreateForm></deploymentCreateForm>
 
+    <p>volume创建表单</p>
+
     <templateCreateForm></templateCreateForm>
     
     
 
     
+    <el-button @click="viewPostdata" >预览postdata</el-button>
+    <el-button @click="create" >创建</el-button>
     <el-button @click="addContainer" >添加容器</el-button>
-    <el-button @click="pushTest" >测试</el-button>
     <el-card style="margin-top: 20px;">
         <el-input
         v-model="itemyaml"
@@ -65,11 +68,23 @@
 
     // 添加容器到deployment
     deploymentStore.deployment.spec.template = template.value
+    // 添加deplotment到postdata
+    postStore.postData.item = deploymentStore.deployment
 
     watchEffect(() => {
 
-        itemyaml.value = anyToYaml(deployment.value)
+        itemyaml.value = anyToYaml(postData.value)
     })
+
+    const viewPostdata = () => {
+      console.log(postData.value)
+      
+    }
     
+    const create = () => {
+      postStore.postUrl = 'deployment/add'
+      postStore.SendQuerry()
+      console.log(response.value);
+    }
     </script>
     

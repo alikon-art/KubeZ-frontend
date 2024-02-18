@@ -1,10 +1,10 @@
 <template>
-  <!-- 当鼠标移除时,触发事件 -->
-  <el-card style="margin-top: 20px;"  @mouseleave="handleMouseLeave">
+ 
+  <el-card style="margin-top: 20px;"  >
     <div >
     <el-container>
       <el-aside width="200px">
-        <el-card> 
+        <el-card shadow="hover"> 
           <!-- <el-button type="primary" @click="addContainer">添加容器</el-button> -->
 
 
@@ -14,6 +14,7 @@
             editable
             @edit="handleTabsEdit"
             :before-leave="beforeLeave"
+            @tab-click="sideTabClick"
             tab-position="left"
           >
             <el-tab-pane
@@ -30,7 +31,7 @@
 
 
       <el-main >
-        <el-card >
+        <el-card @mouseleave="handleMouseLeave" shadow="hover">
           <el-tabs v-model="activeName"  @tab-click="handleClick">
             <el-tab-pane label="容器基本信息" name="containerBasicInfo">
               <el-form
@@ -43,12 +44,28 @@
                 status-icon
               >
                 <el-form-item label="容器名称" prop="name" >
-                  <el-input v-model="ruleForm.name" @change="updateSideContainerName()"/>
+                  <el-input v-model="ruleForm.name" @input="updateSideContainerName()"/>
                 </el-form-item>
                 <el-form-item label="镜像" prop="image">
                   <el-input v-model="ruleForm.image" />
                 </el-form-item>
-                </el-form>
+                <el-form-item label='镜像拉取策略' prop='imagePullPolicy'>
+                  <el-select v-model="ruleForm.imagePullPolicy">
+                    <el-option label="IfNotPresent" value="IfNotPresent" />
+                    <el-option label="Always" value="Always" />
+                    <el-option label="Never" value="Never" />
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="启动命令" prop="command">
+                  <el-input v-model="ruleForm.command" />
+                </el-form-item>
+                <el-form-item label="启动参数" prop="args">
+                  <el-input v-model="ruleForm.args" />
+                </el-form-item>
+                <el-form-item label="镜像拉取密钥" prop="imagePullSecrets">
+                  <el-input v-model="ruleForm.imagePullSecrets" />
+                </el-form-item>
+              </el-form>
 
             </el-tab-pane>
             <el-tab-pane label="高级设置" name="advancedSettings">
@@ -67,13 +84,6 @@
                 <el-form-item label="工作目录" prop="workingDir">
                   <el-input v-model="ruleForm.workingDir" />
                 </el-form-item>
-                <el-form-item label="镜像拉取策略" prop="imagePullPolicy">
-                  <el-select v-model="ruleForm.imagePullPolicy">
-                    <el-option label="IfNotPresent" value="IfNotPresent" />
-                    <el-option label="Always" value="Always" />
-                    <el-option label="Never" value="Never" />
-                  </el-select>
-                </el-form-item>
                 <el-form-item label="资源限制" prop="limits">
                   <el-form-item label="内存" prop="limits.memory">
                     <el-input v-model="ruleForm.limits.memory" />
@@ -90,22 +100,141 @@
                     <el-input v-model="ruleForm.requests.cpu" />
                   </el-form-item>
                 </el-form-item>
-                <el-form-item label="端口" prop="ports">
-                  <el-input v-model="ruleForm.ports" />
-                </el-form-item>
-                <el-form-item label="生命周期" prop="lifecycle">
-                  <el-input v-model="ruleForm.lifecycle" />
-                </el-form-item>
               </el-form>
             </el-tab-pane>
 
+            <el-tab-pane label="环境变量" name="env">
+              <el-table
+                :data="ruleForm.env"
+                style="width: 100%"
+              >
+                <el-table-column label="名称" prop="name" width="180">
+                  <template v-slot="{ row }">
+                    <el-input v-model="row.name" />
+                  </template>
+                </el-table-column>
+                <el-table-column label="值" prop="value" width="180">
+                  <template v-slot="{ row }">
+                    <el-input v-model="row.value" />
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" width="180">
+                  <template v-slot="{ row }">
+                    <el-button
+                      type="text"
+                      size="small"
+                      @click="deleteEnv(row)"
+                      >删除</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+              <el-button @click="handleAddEnv">添加环境变量</el-button>
+
+            </el-tab-pane>
+
+            <el-tab-pane label="端口" name="ports">
+              <el-table
+                :data="ruleForm.ports"
+                style="width: 100%"
+                :row-class-name="tableRowClassName"
+              >
+                <el-table-column
+                  label="容器端口"
+                  prop="containerPort"
+                  width="180"
+                >
+                  <template v-slot="{ row }">
+                    <el-input v-model="row.containerPort" />
+                  </template>
+              </el-table-column>
+                <el-table-column label="协议" prop="protocol" width="180">
+                  <template v-slot="{ row }">
+                    <el-select v-model="row.protocol">
+                      <el-option label="TCP" value="TCP" />
+                      <el-option label="UDP" value="UDP" />
+                    </el-select>
+                  </template>
+                </el-table-column>
+                <el-table-column label="端口名称" prop="name" width="180">
+                  <template v-slot="{ row }">
+                    <el-input v-model="row.name" />
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" width="180">
+                  <template v-slot="{ row }">
+                    <el-button
+                      type="text"
+                      size="small"
+                      @click="deletePort(row)"
+                      >删除</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+              <el-button @click="handleAdd">添加端口</el-button>
+              
+
+
+            </el-tab-pane>
+
+            <el-tab-pane label="生命周期" name="lifecycle">
+              <el-card shadow="hover">
+                <el-form
+                  ref="ruleFormRef"
+                  :model="ruleForm"
+                  :rules="rules"
+                  label-width="80px"
+                  class="demo-ruleForm"
+                  status-icon
+                >
+                
+                  <el-form-item label="PostStart" prop="postStart">
+                    <!-- 一个按钮组,用于选择PostStart的检查方式 -->
+                    <el-radio-group v-model="ruleForm.lifecycle.postStart" @change="postStartChange">
+                      <el-radio-button label="close" />
+                      <el-radio-button label="httpGet" />
+                      <el-radio-button label="exec" />
+                      <el-radio-button label="tcpSocket" />
+                    </el-radio-group>
+                    <!-- 当选择的检查方式为httpGet时,展示以下菜单 -->
+                    <el-form-item v-if="ruleForm.lifecycle.postStart?.httpGet" label="路径" prop="path">
+                      <el-input v-model="ruleForm.lifecycle.postStart.httpGet.path" />
+                    </el-form-item>
+                    <el-form-item v-if="ruleForm.lifecycle.postStart?.httpGet" label="端口" prop="port">
+                      <el-input v-model="ruleForm.lifecycle.postStart.httpGet.port" />
+                      </el-form-item>
+                    <el-form-item v-if="ruleForm.lifecycle.postStart?.httpGet" label="主机" prop="host">
+                      <el-input v-model="ruleForm.lifecycle.postStart.httpGet.host" />
+                      </el-form-item> 
+                    <!-- 当选择的检查方式为exec时,展示以下菜单 -->
+                    <el-form-item v-if="ruleForm.lifecycle.postStart?.exec" label="命令" prop="command">
+                      <el-input v-model="ruleForm.lifecycle.postStart.exec.command" />
+                      </el-form-item> 
+                    <!-- 当选择的检查方式为tcpSocket时,展示以下菜单 -->
+                    <el-form-item v-if="ruleForm.lifecycle.postStart?.tcpSocket" label="端口" prop="port">
+                      <el-input v-model="ruleForm.lifecycle.postStart.tcpSocket.port" />
+                      </el-form-item>
+
+                  </el-form-item>
+                    
+   
+
+                  
+                </el-form>
+              </el-card>
+
+              
+            </el-tab-pane>
+
+
           </el-tabs>
-          <el-button type="primary" @click="updateContainerInfo">保存容器信息</el-button>
+          <!-- <el-button type="primary" @click="updateContainerInfo">保存容器信息</el-button> -->
         </el-card>
       </el-main>
     </el-container>
   </div>
-  <el-button type="primary" @click="addContainer">保存容器信息</el-button>
+  <!-- <el-button type="primary" @click="updateContainerInfo">保存容器信息</el-button> -->
   </el-card>
   </template>
   
@@ -116,19 +245,20 @@ import pinia from 'pinia'
 import { useTemplatetStore } from "@/model/templateStore.vue";
 import { storeToRefs } from "pinia";
 
+const formSize = ref('default')
+
 // 加载template存储库
 const templateStore = useTemplatetStore()
-const { containers,template } = storeToRefs(templateStore)
-
 
 // 当前激活的容器名称
-const activeContainerName = ref('container1')
+const activeContainerName = ref('Container1')
 
 // 当前激活的容器索引
 const activeContainerIndex = ref(0)
 
-// 默认打开的标签页
+// 右侧默认打开的标签页
 const activeName = ref('containerBasicInfo')
+
 
 
 
@@ -139,33 +269,91 @@ const addContainer = () => {
   console.log('添加容器')
 }
 
+
+// 点击左侧切换容器标签页时,触发事件
+// 用于加载右侧容器的信息
+const sideTabClick = (tab, event) => {
+  console.log('点击了标签页',tab.props.name);
+  getContainerInfo(tab.props.name)
+}
+
+const handleClick = (tab, event) => {
+  console.log('点击了标签页',tab,event);
+}
+
+// 切换标签页时,触发事件
 const beforeLeave = (activeName, oldName) => {
   console.log('即将离开', oldName, '即将去',activeName)
-  getContainerInfo(activeName)
+
+  // 获取即将跳转的容器的详细信息
+  // getContainerInfo(activeName)
   return true
 }
 
 // 从templateStore中获取容器信息
+// 会在切换左侧容器标签页时触发
 const getContainerInfo = (containerName) => {
+  console.log('即将获取容器信息',containerName);
   // 获取要读取的容器的索引
   const index = templateStore.getContainerIndex(containerName)
+  // 获取容器基本信息
   ruleForm.value.name = templateStore.template.spec.containers[index].name
   ruleForm.value.image = templateStore.template.spec.containers[index].image
-  console.log('容器信息为',ruleForm.value);
+  ruleForm.value.imagePullPolicy = templateStore.template.spec.containers[index].imagePullPolicy
+  ruleForm.value.command = templateStore.template.spec.containers[index].command
+  ruleForm.value.args = templateStore.template.spec.containers[index].args
+  ruleForm.value.imagePullSecrets = templateStore.template.spec.containers[index].imagePullSecrets
+  // 获取容器高级设置
+  ruleForm.value.tty = templateStore.template.spec.containers[index].tty
+  ruleForm.value.workingDir = templateStore.template.spec.containers[index].workingDir
+  ruleForm.value.limits = templateStore.template.spec.containers[index].resources.limits
+  ruleForm.value.requests = templateStore.template.spec.containers[index].resources.requests
+  // 获取容器环境变量
+  ruleForm.value.env = templateStore.template.spec.containers[index].env
+  // 获取容器端口
+  ruleForm.value.ports = templateStore.template.spec.containers[index].ports
+  // 获取容器生命周期
+  ruleForm.value.lifecycle = templateStore.template.spec.containers[index].lifecycle
+
+  console.log('获得容器信息为',ruleForm.value);
 }
 
-// 更新templateStore中容器信息
+// 将右侧输入卡片的信息保存到templateStore中
+// 会在鼠标移出右侧输入卡片时触发
 const updateContainerInfo = () => {
-  templateStore.setContainersName(activeContainerIndex.value,ruleForm.value.name)
-  templateStore.setContainersImage(activeContainerIndex.value,ruleForm.value.image)
+  console.log('即将保存容器'+activeContainerName.value+'的信息到templateStore中');
+  // 获取要更新的容器的索引
+  const index = templateStore.getContainerIndex(activeContainerName.value)
+  templateStore.setContainersName(index,ruleForm.value.name)
+  templateStore.setContainersImage(index,ruleForm.value.image)
+  templateStore.setContainersImagePullPolicy(index,ruleForm.value.imagePullPolicy)  
+  templateStore.setContainersCommand(index,ruleForm.value.command)
+  templateStore.setContainersArgs(index,ruleForm.value.args)
+  templateStore.setContainersEnv(index,ruleForm.value.env)
+  templateStore.setContainersImagePullSecrets(index,ruleForm.value.imagePullSecrets)
+  templateStore.setContainersTty(index,ruleForm.value.tty)
+  templateStore.setContainersWorkingDir(index,ruleForm.value.workingDir)
+
+  templateStore.setContainersPorts(index,ruleForm.value.ports)
+
+  // 设置资源限制
+  // templateStore.setContainersResourcesLimits(index,ruleForm.value.limits)
+  // templateStore.setContainersResourcesRequests(index,ruleForm.value.requests)
+
+  // 设置生命周期
+  templateStore.setContainersLifecycle(index,ruleForm.value.lifecycle)
+
+  console.log('保存的容器信息为',ruleForm.value);
 }
 
 const handleMouseLeave = () => {
-  console.log('onmouseout')
+  console.log('鼠标移出右侧卡片');
+  updateContainerInfo()
 }
 
 
 // 更新左侧容器名称
+// 会在右侧容器名称输入框输入时触发
 const updateSideContainerName = () => {
   // 更新templateStore中容器名称
   templateStore.setContainersName(activeContainerIndex.value,ruleForm.value.name)
@@ -195,11 +383,23 @@ const ruleForm = ref({
     memory: '128Mi',
     cpu: '100m',
   },
+  ports: [
 
-
-  
-  ports: [],
+  ],
   lifecycle: {},
+  command: '',
+  args: '',
+  
+  imagePullSecrets: '',
+  dnsPolicy: 'ClusterFirst',
+  hostNetwork: false,
+  selector: '',
+
+  env:[
+  ]
+
+
+
 })
 const rules = ref({
   name: [{ required: true, message: '请输入容器名称', trigger: 'blur' }],
@@ -207,13 +407,74 @@ const rules = ref({
 })
 
 
+// 当postStart改变时,触发事件
+const postStartChange = (value) => {
+  console.log('postStart改变了',value);
+  // 根据选择的检查方式,向postStart添加对应的检查方式
+  if (value === 'httpGet') {
+    ruleForm.value.lifecycle.postStart = {
+      httpGet: {
+        path: '/',
+        port: 80,
+        host: 'localhost',
+      },
+    }
+  } else if (value === 'exec') {
+    ruleForm.value.lifecycle.postStart = {
+      exec: {
+        command: ['ls', '-l'],
+      },
+    }
+  } else if (value === 'tcpSocket') {
+    ruleForm.value.lifecycle.postStart = {
+      tcpSocket: {
+        port: 80,
+      },
+    }
+  } else if (value === 'close') {
+    // 删除postStart
+    delete ruleForm.value.lifecycle.postStart
+  }
 
-const formSize = ref('default')
+
+
+  
+}
+
+
+// 添加端口
+const handleAdd = () => {
+  ruleForm.value.ports.push({
+    containerPort: 80,
+    protocol: 'TCP',
+    name: 'http',
+  })
+}
+
+// 删除端口
+const deletePort = (row) => {
+  const index = ruleForm.value.ports.indexOf(row)
+  ruleForm.value.ports.splice(index, 1)
+
+}
+
+// 添加环境变量
+const handleAddEnv = () => {
+  ruleForm.value.env.push({
+    name: '',
+    value: '',
+  })
+}
+
+// 删除环境变量
+const deleteEnv = (row) => {
+  const index = ruleForm.value.env.indexOf(row)
+  ruleForm.value.env.splice(index, 1)
+}
 
 
 
-
-
+// 左侧标签的容器列表
 const editableTabs = ref([
   // {
   //   title: 'Container1',
@@ -225,10 +486,10 @@ const editableTabs = ref([
 const editableTabsValue = ref('1')
 // 当前选中的容器id变化时,触发事件
 watchEffect(() => {
-  console.log('editableTabsValue变化了',editableTabsValue.value)
+  console.log('当前选中的容器id变化了',editableTabsValue.value)
   // 从editableTabs中寻找name为editableTabsValue的容器
   const tab = editableTabs.value.find((tab) => tab.name === editableTabsValue.value)
-  // 将当前选中的容器的title赋值给activeContainerName
+  // 将当前选中的容器的名称赋值给activeContainerName
   activeContainerName.value = tab?.name
   console.log('当前选中的容器名称为',activeContainerName.value)
   // 将当前选中的容器的索引赋值给activeContainerIndex,索引从templateStore中获取
@@ -240,7 +501,7 @@ watchEffect(() => {
 
 // 容器的起始id
 let tabIndex = 1
-let tabName = 'Container'
+let tabName = 'container'
 
 // 标签页的编辑事件
 const handleTabsEdit = (
@@ -298,7 +559,10 @@ const handleTabsEdit = (
 }
 
 onMounted(() => {
-  console.log('mounted')
-  // templateStore.addContainer()
+  console.log('mounted');
+  // 默认添加一个容器
+  handleTabsEdit(undefined, 'add')
+  // 获取容器信息
+  getContainerInfo('container1')
 })
 </script>

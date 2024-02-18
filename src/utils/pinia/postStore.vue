@@ -14,6 +14,7 @@
             clusterid:'cluster1',
             namespace:'default',
             name:'',
+            item:{},
         } ,
         // post请求的url
         postUrl:'pod/list',
@@ -51,6 +52,7 @@
         },
 
         // 发送请求的方法,有错误处理(弹窗)
+        // 会将返回的数据存入response和itemData
         async SendQuerry() {
             try {
                 const res = await axiosInstance.post(this.postUrl, this.postData);
