@@ -1,10 +1,8 @@
 <template>
     <clusterAndNamespaceSelecter></clusterAndNamespaceSelecter>
 
-    <deploymentCreateForm></deploymentCreateForm>
+    <serviceCreateForm></serviceCreateForm>
 
-    <templateCreateForm></templateCreateForm>
-    
     
 
     <div style="margin-top: 20px; float: right;  " >
@@ -42,15 +40,13 @@
     import {anyToYaml} from '../../utils/jsyaml/jsyaml.vue'
 
     // 导入表单组件
-    import deploymentCreateForm from './deploymentCreateForm.vue'
+    import serviceCreateForm from './serviceCreateForm.vue'
     import clusterAndNamespaceSelecter from '../viewComponents/clusterAndNamespaceSelecter.vue';
-    import templateCreateForm from '../template/templateCreateForm.vue';
     
 
     // 导入pinia存储库
     import { UsePostStore } from "../../utils/pinia/postStore.vue";
-    import { useDeploymentStore } from "@/model/deploymentStore.vue";
-    import { useTemplatetStore } from "@/model/templateStore.vue";
+    import { useServiceStore } from "@/model/serviceStore.vue";
 
     // 导入通知组件
     import { Notification } from "@/utils/elements/notification.vue"
@@ -60,13 +56,11 @@
     const postStore  =  UsePostStore()
     const { postUrl,postData ,response,itemData,componentsStatus } = storeToRefs(postStore)
 
-    // 加载deployment存储库
-    const deploymentStore = useDeploymentStore()
-    const { deployment } = storeToRefs(deploymentStore)
+    // 加载service存储库
+    const serviceStore = useServiceStore()
+    const { service } = storeToRefs(serviceStore)
 
-    // 加载template存储库
-    const templateStore = useTemplatetStore()
-    const { containers,template } = storeToRefs(templateStore)
+
 
 
     const showYaml = ref(false)
@@ -84,13 +78,10 @@
     // itemyaml.value = anyToYaml(containers.value)
 
 
-    // 添加容器到deployment
-    deploymentStore.deployment.spec.template = template.value
-
     
 
     // 添加deplotment到postdata
-    postStore.postData.item = deploymentStore.deployment
+    postStore.postData.item = serviceStore.service
 
 
 
@@ -106,7 +97,7 @@
     }
     
     const create = () => {
-      postStore.postUrl = 'deployment/add'
+      postStore.postUrl = 'service/add'
       postStore.SendQuerry()
       console.log(response.value);
       if (response.value.status === "200") {

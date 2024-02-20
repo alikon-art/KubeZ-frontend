@@ -1,4 +1,4 @@
-<template>
+<!-- <template> -->
     <!-- <el-divider >messageBoxTest</el-divider>
     <messageBoxTest></messageBoxTest>
     <el-divider >jsyaml</el-divider>
@@ -17,11 +17,11 @@
     <listTest></listTest> -->
     <!-- <el-divider>pinia</el-divider>
     <store></store> -->
-    <el-divider>detailtest</el-divider>
-    <detailtest></detailtest>
-</template>
+    <!-- <el-divider>detailtest</el-divider>
+    <detailtest></detailtest> -->
+<!-- </template> -->
   
-<script setup>
+<!-- <script setup>
     import  messageBoxTest  from "./utils/elements/messageBoxTest.vue";
     import jsyaml from "./utils/jsyaml/testYaml.vue"
     import  deploymentTest  from "./model/deploymentTest.vue";
@@ -32,6 +32,31 @@
     import listTest from "./components/listTest.vue";
     import store from "./utils/pinia/piniaview.vue"
     import detailtest from "./components/detailtest.vue";
-</script> 
+</script>  -->
+
+
+
+<template>
+  
+    <el-button type="primary" style="margin-left: 16px" @click="drawer = true">
+      open
+    </el-button>
+  
+    <el-drawer
+      v-model="drawer"
+      title="I am the title"
+      :direction="btt"
+    >
+      <span>Hi, there!</span>
+    </el-drawer>
+    
+  </template>
+  
+  <script lang="ts" setup>
+  import { ref } from 'vue'
+  
+  const drawer = ref(false)
+  </script>
+  
 
 

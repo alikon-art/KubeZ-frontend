@@ -1,5 +1,5 @@
 <template>
-    <clusterAndNamespaceSelecter></clusterAndNamespaceSelecter>>
+    <clusterAndNamespaceSelecter></clusterAndNamespaceSelecter>
     <listComponents></listComponents>
     
 </template>

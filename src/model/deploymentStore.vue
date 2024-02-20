@@ -79,6 +79,11 @@ const useDeploymentStore = defineStore('deployment',{
         this.deployment.spec.template.metadata.annotations = {}
         },
 
+        // 删除所有Strategy
+        deleteDeploymentStrategy() {
+        this.deployment.spec.strategy = {}
+        },
+
 
         setDeploymentNamespace(namespace) {
         this.deployment.metadata.namespace = namespace
@@ -88,6 +93,9 @@ const useDeploymentStore = defineStore('deployment',{
         },
         setDeploymentDnsPolicy(dnsPolicy) {
             this.deployment.spec.template.spec.dnsPolicy = dnsPolicy
+        },
+        setDeploymentStrategy(strategy) {
+            this.deployment.spec.strategy = strategy
         },
         setDeploymentHostNetwork(hostNetwork) {
             this.deployment.spec.template.spec.hostNetwork = hostNetwork

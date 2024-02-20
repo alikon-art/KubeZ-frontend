@@ -10,12 +10,17 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
+    "@highlightjs/vue-plugin": "^2.1.0",
     "axios": "^1.6.5",
+    "codemirror": "^6.0.1",
+    "codemirror-editor-vue3": "^2.4.1",
     "element-plus": "^2.5.2",
+    "highlight.js": "^11.9.0",
     "js-yaml": "^4.1.0",
     "pinia": "^2.1.7",
     "tdesign-vue-next": "^1.8.0",
     "vue": "^3.3.11",
+    "vue-codemirror6": "^1.2.5",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {

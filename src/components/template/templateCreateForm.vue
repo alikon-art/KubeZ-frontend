@@ -1,11 +1,12 @@
 <template>
+  <volume-create-form />
  
-  <el-card style="margin-top: 20px;"  >
+  <el-card style="margin-top: 20px;" header="容器模板设置" >
     <div >
     <el-container>
       <el-aside width="200px">
-        <el-card shadow="hover"> 
-          <!-- <el-button type="primary" @click="addContainer">添加容器</el-button> -->
+        <el-card  header="容器列表" style="margin-right:20px;"> 
+          <!-- <el-button type="primary" @click="handleTabsEdit(undefined, 'add')">添加容器</el-button> -->
 
 
           <el-tabs
@@ -30,7 +31,7 @@
 
 
 
-      <el-main >
+      <el-main style="padding: 0;">
         <el-card @mouseleave="handleMouseLeave" shadow="hover">
           <el-tabs v-model="activeName"  @tab-click="handleClick">
             <el-tab-pane label="容器基本信息" name="containerBasicInfo">
@@ -38,7 +39,7 @@
                 ref="ruleFormRef"
                 :model="ruleForm"
                 :rules="rules"
-                label-width="140px"
+                label-width="100px"
                 class="demo-ruleForm"
                 :size="formSize"
                 status-icon
@@ -56,11 +57,11 @@
                     <el-option label="Never" value="Never" />
                   </el-select>
                 </el-form-item>
-                <el-form-item label="启动命令" prop="command">
-                  <el-input v-model="ruleForm.command" />
+                <el-form-item label="启动命令" prop="cmd">
+                  <el-input v-model="ruleForm.cmd  " />
                 </el-form-item>
-                <el-form-item label="启动参数" prop="args">
-                  <el-input v-model="ruleForm.args" />
+                <el-form-item label="启动参数" prop="arg">
+                  <el-input v-model="ruleForm.arg" />
                 </el-form-item>
                 <el-form-item label="镜像拉取密钥" prop="imagePullSecrets">
                   <el-input v-model="ruleForm.imagePullSecrets" />
@@ -73,7 +74,7 @@
                 ref="ruleFormRef"
                 :model="ruleForm"
                 :rules="rules"
-                label-width="140px"
+                label-width="100px"
                 class="demo-ruleForm"
                 :size="formSize"
                 status-icon
@@ -85,7 +86,7 @@
                   <el-input v-model="ruleForm.workingDir" />
                 </el-form-item>
                 <el-form-item label="资源限制" prop="limits">
-                  <el-form-item label="内存" prop="limits.memory">
+                  <el-form-item label="内存" prop="limits.memory" >
                     <el-input v-model="ruleForm.limits.memory" />
                   </el-form-item>
                   <el-form-item label="CPU" prop="limits.cpu">
@@ -137,7 +138,6 @@
               <el-table
                 :data="ruleForm.ports"
                 style="width: 100%"
-                :row-class-name="tableRowClassName"
               >
                 <el-table-column
                   label="容器端口"
@@ -227,6 +227,54 @@
               
             </el-tab-pane>
 
+            <el-tab-pane label="存储挂载" name="volumeMounts">
+              <el-card shadow="hover">
+                <el-table
+                :data="ruleForm.volumeMounts"
+                style="width: 100%"
+              >
+                <!-- 要挂载的卷名称使用selecter从volumestore.volumes.name中选择 -->
+                <el-table-column label="卷名称" prop="name" width="180">
+                  <template v-slot="{ row }">
+                    <el-select v-model="row.name" placeholder="请选择">
+                      <el-option
+                        v-for="item in volumeStore.volumes"
+                        :key="item.name"
+                        :label="item.name"
+                        :value="item.name"
+                      />
+                    </el-select>
+                  </template>
+                </el-table-column>
+                <el-table-column label="挂载路径" prop="mountPath" width="180">
+                  <template v-slot="{ row }">
+                    <el-input v-model="row.mountPath" />
+                  </template>
+                </el-table-column>
+                <el-table-column label="子路径" prop="subPath" width="180">
+                  <template v-slot="{ row }">
+                    <el-input v-model="row.subPath" />
+                  </template>
+                </el-table-column>
+                <el-table-column label="只读" prop="readOnly" width="180">
+                  <template v-slot="{ row }">
+                    <el-switch v-model="row.readOnly" />
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" width="180">
+                  <template v-slot="{ row }">
+                    <el-button
+                      type="text"
+                      size="small"
+                      @click="deleteVolumeMounts(row)"
+                      >删除</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+              <el-button @click="addVolumeMounts">添加存储挂载</el-button>
+                </el-card>
+            </el-tab-pane>
 
           </el-tabs>
           <!-- <el-button type="primary" @click="updateContainerInfo">保存容器信息</el-button> -->
@@ -241,20 +289,39 @@
 <script lang="ts" setup>
 import { onMounted, ref, watchEffect } from 'vue'
 import type { TabPaneName } from 'element-plus'
-import pinia from 'pinia'
-import { useTemplatetStore } from "@/model/templateStore.vue";
+
 import { storeToRefs } from "pinia";
 
-const formSize = ref('default')
+// 导入volume创建表单
+import VolumeCreateForm from "@/components/volume/volumeCreateForm.vue";
 
-// 加载template存储库
+
+// 导入存储库
+import { useTemplatetStore } from "@/model/templateStore.vue";
+import { useVolumeStore } from "@/model/volumeStore.vue";
+
+
+// 加载存储库
 const templateStore = useTemplatetStore()
+const { containers,template } = storeToRefs(templateStore)
+const volumeStore = useVolumeStore()
+const { volumes } = storeToRefs(volumeStore)
+
+
+// 从volumeStore添加volume对象到template中
+templateStore.template.spec.volumes = volumes.value
+
+
+
+
 
 // 当前激活的容器名称
 const activeContainerName = ref('Container1')
 
 // 当前激活的容器索引
 const activeContainerIndex = ref(0)
+
+const formSize = ref('default')
 
 // 右侧默认打开的标签页
 const activeName = ref('containerBasicInfo')
@@ -314,6 +381,9 @@ const getContainerInfo = (containerName) => {
   ruleForm.value.ports = templateStore.template.spec.containers[index].ports
   // 获取容器生命周期
   ruleForm.value.lifecycle = templateStore.template.spec.containers[index].lifecycle
+  // 获取容器存储挂载
+  ruleForm.value.volumeMounts = templateStore.template.spec.containers[index].volumeMounts
+
 
   console.log('获得容器信息为',ruleForm.value);
 }
@@ -337,11 +407,16 @@ const updateContainerInfo = () => {
   templateStore.setContainersPorts(index,ruleForm.value.ports)
 
   // 设置资源限制
-  // templateStore.setContainersResourcesLimits(index,ruleForm.value.limits)
-  // templateStore.setContainersResourcesRequests(index,ruleForm.value.requests)
+  templateStore.setContainersResources(index,{
+    limits: ruleForm.value.limits,
+    requests: ruleForm.value.requests,
+  })
 
   // 设置生命周期
   templateStore.setContainersLifecycle(index,ruleForm.value.lifecycle)
+
+  // 设置存储挂载
+  templateStore.setContainersVolumeMounts(index,ruleForm.value.volumeMounts)
 
   console.log('保存的容器信息为',ruleForm.value);
 }
@@ -387,8 +462,14 @@ const ruleForm = ref({
 
   ],
   lifecycle: {},
-  command: '',
-  args: '',
+
+  // 待转换的输入参数
+  cmd: '',
+  arg: '',
+  // 真实参数
+  command: [],
+  args: [],
+
   
   imagePullSecrets: '',
   dnsPolicy: 'ClusterFirst',
@@ -396,8 +477,10 @@ const ruleForm = ref({
   selector: '',
 
   env:[
-  ]
+  ],
 
+  volumeMounts: [
+  ],
 
 
 })
@@ -406,6 +489,14 @@ const rules = ref({
   image: [{ required: true, message: '请输入镜像', trigger: 'blur' }],
 })
 
+
+// 监听ruleForm的cmd,arg的变化,将其转换为数组
+// 例如,将'ls -l'转换为['ls','-l']
+watchEffect(() => {
+  console.log('cmd,arg变化了',ruleForm.value.cmd,ruleForm.value.arg);
+  ruleForm.value.command = ruleForm.value.cmd.split(' ')
+  ruleForm.value.args = ruleForm.value.arg.split(' ')
+})
 
 // 当postStart改变时,触发事件
 const postStartChange = (value) => {
@@ -470,6 +561,24 @@ const handleAddEnv = () => {
 const deleteEnv = (row) => {
   const index = ruleForm.value.env.indexOf(row)
   ruleForm.value.env.splice(index, 1)
+}
+
+
+
+// 添加存储挂载
+const addVolumeMounts = () => {
+  ruleForm.value.volumeMounts.push({
+    name: '',
+    mountPath: '',
+    subPath: '',
+    readOnly: false,
+  })
+}
+
+// 删除存储挂载
+const deleteVolumeMounts = (row) => {
+  const index = ruleForm.value.volumeMounts.indexOf(row)
+  ruleForm.value.volumeMounts.splice(index, 1)
 }
 
 

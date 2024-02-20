@@ -1,11 +1,13 @@
 <template>
     
-<el-card shadow="hover" >
+<el-card shadow="always" >
+    <el-text  size="large" style="margin: 10px;">请选择集群和命名空间:</el-text>
+    
     <el-select
     v-model="clusterid"
     class="m-2"
     placeholder="选择cluster"
-    style="width: 240px"
+    style="width: 200px"
     @change="clusteridChange($event)"
 
   >
@@ -18,7 +20,7 @@
     v-model="namespace"
     class="m-2"
     placeholder="选择namespace"
-    style="width: 240px"
+    style="width: 200px"
     @change="namespaceChange($event)"
   >
     <el-option
@@ -26,12 +28,13 @@
       :value ="item.name"
     />
   </el-select>
-  <p>选中的选项: {{ clusterid }} {{ namespace }}</p> 
+  <!-- <p>选中的选项: {{ clusterid }} {{ namespace }}</p>  -->
   <!-- {{ namespaces }} -->
-  
+  <div style="margin-left: 10px;margin-top: 5px; " >
 <el-button @click="reloadList">确定</el-button>
 <!-- 当前url就是资源名称 -->
-<el-button @click="createItem">创建{{ currentUrl }}</el-button>
+<el-button @click="createItem" v-if="showCreate">创建{{ currentUrl }}</el-button>
+</div>
 </el-card>
 
 
@@ -54,6 +57,14 @@ const route = useRoute()
 // 获取不带/的当前url
 const currentUrl = ref(route.path.replace('/',''))
 
+const showCreate = ref(false)
+
+// 如果当前url中包含Components则不显示创建按钮
+if (currentUrl.value.includes('Components')) {
+    showCreate.value = false
+} else {
+    showCreate.value = true
+}
 
 
 const createItem= () => {

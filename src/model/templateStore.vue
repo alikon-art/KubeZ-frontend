@@ -32,17 +32,18 @@ const useTemplatetStore = defineStore('template',{
             imagePullPolicy: 'IfNotPresent',
             ports: [],
             lifecycle: {},
+            volumeMounts: [],
             env: [],
             resources: {
-            limits: {
-                memory: '1024Mi',
-                cpu: '1',
+                limits: {
+                    memory: '1024Mi',
+                    cpu: '1',
+                },
+                requests: {
+                    memory: '128Mi',
+                    cpu: '100m',
+                },
             },
-            requests: {
-                memory: '128Mi',
-                cpu: '100m',
-            },
-        },
             
         },
 
@@ -124,7 +125,7 @@ const useTemplatetStore = defineStore('template',{
             this.template.spec.containers[index].tty = tty
         },
 
-        // 根据索引,设置容器资源限制    
+        // 根据索引,设置容器资源requests    
         setContainersResources(index,resources) {
             this.template.spec.containers[index].resources = resources
         },
@@ -165,15 +166,8 @@ const useTemplatetStore = defineStore('template',{
         },
 
 
-        //根据索引,设置容器资源限制limits
-        setContainersResourcesLimits(index,limits) {
-            this.template.spec.containers[index].resources.limits = limits
-        },
 
-        //根据索引,设置容器资源限制requests
-        setContainersResourcesRequests(index,requests) {
-            this.template.spec.containers[index].resources.requests = requests
-        },
+
 
 
 

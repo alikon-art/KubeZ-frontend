@@ -1,11 +1,32 @@
 <template>
   <el-card shadow="hover" style="margin-top: 20px;">
   <el-table :data="tableData" stripe style="width: 100%">
-    <el-table-column prop="clusterid" label="集群id"  />
-    <el-table-column prop="name" label="资源名称"  />
-    <el-table-column prop="namespace" label="命名空间"  />
+    <!-- 集群类 -->
+    <el-table-column prop="clusterid" label="集群id" v-if="isCluster" />
+    <el-table-column prop="clustername" label="集群名称" v-if="isCluster" />
+    <el-table-column prop="version" label="集群版本" v-if="isCluster" />
+    <el-table-column prop="annotations" label="注释" v-if="isCluster" />
+
+    <!-- node类 -->
+    <el-table-column prop="metadata.name" label="Node名称" v-if="isNode" /> 
+    <el-table-column prop="status.conditions[4].status" label="状态" v-if="isNode" >
+      <template #default="scope">
+        <el-tag v-if="scope.row.status.conditions[4].status === 'True'" type="success">Ready</el-tag>
+        <el-tag v-else type="danger">NotReady</el-tag>
+      </template>
+    </el-table-column>
+    <el-table-column prop="status.nodeInfo.osImage" label="操作系统" v-if="isNode" />
+    <el-table-column prop="status.nodeInfo.kubeletVersion" label="kubelet版本" v-if="isNode" />
+    <el-table-column prop="status.nodeInfo.containerRuntimeVersion" label="容器运行时版本" v-if="isNode" />
+    <el-table-column prop="status.nodeInfo.architecture" label="架构" v-if="isNode" />
+    <el-table-column prop="status.conditions[4].lastHeartbeatTime" label="上次就绪时间" v-if="isNode" />
+
+
+    <!-- 非集群类 -->
+    <el-table-column prop="name" label="名称" v-if="showName" />
+    <el-table-column prop="namespace" label="命名空间" v-if="showNamespace" />
     
-    <el-table-column prop="labels" label="lables" >
+    <el-table-column prop="labels" label="lables" v-if="showNamespace">
       <!-- 使用插槽 -->
       <template #default="scope">
         <!-- 展示label的组件 -->
@@ -13,12 +34,14 @@
       </template>
   </el-table-column>
 
-    <el-table-column prop="createtime" label="创建时间" />
+    <el-table-column prop="createtime" label="创建时间" v-if="showCreateTime" />
+
+
     <el-table-column prop="operactions" label="操作" >
       <!-- 按钮插槽 -->
       <template #default="scope">
-        <el-button @click="showItemInfo(scope.row)">详情</el-button>
-        <el-button @click="deleteItem(scope.row)">删除</el-button>
+        <el-button @click="showItemInfo(scope.row)" v-if="currentUrl != 'cluster'" >详情</el-button>
+        <el-button @click="deleteItem(scope.row)" type="danger" size="small" >删除</el-button>
       </template>
 
     </el-table-column>
@@ -35,12 +58,17 @@ import { UsePostStore } from "../utils/pinia/postStore.vue";
 import { storeToRefs } from "pinia";
 import { useRouter,useRoute } from 'vue-router'
 
+// 加载通知组件
+import { Notification } from "@/utils/elements/notification.vue"
+
 // 使用路由
 const router = useRouter()
 const route = useRoute()
 
 // 获取不带/的当前url
 const currentUrl = ref(route.path.replace('/',''))
+// 将当前url转换为小写
+currentUrl.value = currentUrl.value.toLowerCase()
 
 // 使用存储库
 const postStore  =  UsePostStore()
@@ -51,6 +79,36 @@ const { postUrl,postData ,response,componentsStatus } = storeToRefs(postStore)
 // 初始化数据
 const res = postStore.response
 const tableData = reactive([])
+
+
+// 控制列表展示项目
+const isCluster = ref(false)
+if (currentUrl.value === 'cluster') {
+  isCluster.value = true
+} else {
+  isCluster.value = false
+}
+
+const showName = ref(true)
+if (  currentUrl.value === 'cluster' || currentUrl.value === 'node') {
+  showName.value = false
+}
+
+const showNamespace = ref(true)
+if (currentUrl.value === 'namespace' || currentUrl.value === 'cluster' || currentUrl.value === 'node') {
+  showNamespace.value = false
+} 
+
+const showCreateTime = ref(true)
+if (currentUrl.value === 'node') {
+  showCreateTime.value = false
+}
+
+// 当前为node
+const isNode = ref(false)
+if (currentUrl.value === 'node') {
+  isNode.value = true
+}
 
 // 在挂载时发起网络请求
 onMounted(async () => {
@@ -64,7 +122,10 @@ async function reload(){
   // console.log('response', response.value.data.items,typeof(response));
   if (response.value.data.items && response.value.data.items.length > 0) {
     tableData.push(...response.value.data.items)
-  }else{}
+  }
+  if (response.value.data.clusters && response.value.data.clusters.length > 0) {
+    tableData.push(...response.value.data.clusters)
+  }
 }
 
 function log (){
@@ -90,7 +151,16 @@ const showItemInfo = (row) =>{
 
 
 const deleteItem = (row) =>{
-  console.log(row);
+  console.log(currentUrl.value,row.namespace,row.name);
+  postUrl.value = '/'+currentUrl.value+'/delete'
+  postData.value.namespace = row.namespace
+  postData.value.name = row.name
+  postStore.SendQuerry()
+  if (response.value.status === "200") {
+    Notification('删除成功','删除成功','success')
+    tableData.splice(0,tableData.length)
+    reload()
+  }
 }
 
 

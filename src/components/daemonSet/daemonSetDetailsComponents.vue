@@ -2,7 +2,7 @@
 
     <basicInfo></basicInfo>
     <status></status>
-    <deploymentInfoCard></deploymentInfoCard>
+    <daemonSetInfoCard></daemonSetInfoCard>
     <containersInfo  :containers="itemData.spec?.template?.spec?.containers"></containersInfo>
     <volumeInfo :volumes="itemData.spec?.template?.spec?.volumes"  ></volumeInfo>
     
@@ -21,7 +21,7 @@
 
     import basicInfo from "../cardsComponents/basicInfo.vue"
     import status from "../cardsComponents/status.vue"
-    import deploymentInfoCard from "./deploymentInfoCard.vue"
+    import daemonSetInfoCard from "./daemonSetInfoCard.vue"
     import containersInfo from '../cardsComponents/containersInfo.vue'
     import volumeInfo from '../cardsComponents/volumeInfo.vue'
     
@@ -37,7 +37,7 @@
 
     // 挂载时发起网络请求
     onMounted(async () =>{
-        postUrl.value='/deployment/get'
+        postUrl.value='/daemonset/get'
         if (route.query.name != null) {
             postData.value.name = route.query.name
             postData.value.namespace = route.query.namespace

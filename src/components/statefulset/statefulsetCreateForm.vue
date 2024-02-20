@@ -1,5 +1,5 @@
 <template>
-  <el-card style="margin-top: 20px;" @mouseleave="updateData" header="Deployment基础设置">
+  <el-card style="margin-top: 20px;" @mouseleave="updateData" header="statefulset基础设置">
     <el-form
       ref="ruleFormRef"
       :model="ruleForm"
@@ -8,8 +8,8 @@
       class="demo-ruleForm"
       status-icon
     >
-    <el-form-item label="deployment名称" prop="deploymentName">
-    <el-input v-model="ruleForm.deploymentName" />    
+    <el-form-item label="statefulset名称" prop="statefulsetName">
+    <el-input v-model="ruleForm.statefulsetName" />    
     </el-form-item>
 
     <el-form-item label="副本数" prop="replicas">
@@ -29,14 +29,14 @@
         <el-option  value="RollingUpdate" />
         <el-option  value="Recreate" />
       </el-select>
-      <!-- <div v-if="ruleForm.strategy.type ===  'RollingUpdate'" > -->
-      <el-form-item label="最大可用" prop="maxSurge" label-width="auto" style="margin-top: 15px;margin-right: 15px;" v-if="ruleForm.strategy.type ===  'RollingUpdate'">
-        <el-input v-model="ruleForm.strategy.rollingUpdate.maxSurge" />
-      </el-form-item>
+
       <el-form-item label="最大不可用" prop="maxUnavailable"  label-width="auto" style="margin-top: 15px;" v-if="ruleForm.strategy.type ===  'RollingUpdate'">
           <el-input v-model="ruleForm.strategy.rollingUpdate.maxUnavailable" />
       </el-form-item> 
-    <!-- </div> -->
+      <el-form-item label="分段" prop="partition"  label-width="auto" style="margin-top: 15px; margin-left:15px; " v-if="ruleForm.strategy.type ===  'RollingUpdate'">
+          <el-input-number v-model="ruleForm.strategy.rollingUpdate.partition" />
+        </el-form-item> 
+
     </el-form-item>
 
     <el-form-item label="使用主机网络" prop="hostNetwork">
@@ -103,13 +103,13 @@
     import type { FormInstance, FormRules } from 'element-plus'
 
     // 导入pinia存储库
-    import { useDeploymentStore } from "@/model/deploymentStore.vue";
+    import { usestatefulsetStore } from "@/model/statefulsetStore.vue";
     import { UsePostStore } from "../../utils/pinia/postStore.vue";
     import { storeToRefs } from "pinia";
 
-    // 加载deployment存储库
-    const deploymentStore = useDeploymentStore()
-    const { deployment } = storeToRefs(deploymentStore)
+    // 加载statefulset存储库
+    const statefulsetStore = usestatefulsetStore()
+    const { statefulset } = storeToRefs(statefulsetStore)
 
     // 加载postdata存储库
     const postStore  =  UsePostStore()
@@ -135,55 +135,55 @@
     }
 
     // 保存编辑器中label的方法,将数据添加到ruleForm.label中
-    // 会将{key: 'app',value:'nginx'}格式的valuePairs转换成符合deployment的label格式
+    // 会将{key: 'app',value:'nginx'}格式的valuePairs转换成符合statefulset的label格式
     const saveLabel = () => {
-      // 如果当前激活的标签页是controllerLabel,则保存label到deployment.metadata.labels
+      // 如果当前激活的标签页是controllerLabel,则保存label到statefulset.metadata.labels
       if (activeTabName.value === 'controllerLabel') {
         // 初始化label
-        deploymentStore.deleteDeploymentLabels()
+        statefulsetStore.deletestatefulsetLabels()
         ruleForm.label = {}
         // 将valuePairs转换成ruleForm.label
         ruleForm.valuePairs.forEach((item) => {
           ruleForm.label[item.key] = item.value
         })
-        // 将label存入deploymentStore
-        deploymentStore.setDeploymentLabels(ruleForm.label)
+        // 将label存入statefulsetStore
+        statefulsetStore.setstatefulsetLabels(ruleForm.label)
       }
-      // 如果当前激活的标签页是controllerAnnotation,则保存annotation到deployment.metadata.annotations
+      // 如果当前激活的标签页是controllerAnnotation,则保存annotation到statefulset.metadata.annotations
       else if (activeTabName.value === 'controllerAnnotation') {
         // 初始化annotation
-        deploymentStore.deleteDeploymentAnnotations()
+        statefulsetStore.deletestatefulsetAnnotations()
         ruleForm.label = {}
         // 将valuePairs转换成ruleForm.label
         ruleForm.valuePairs.forEach((item) => {
           ruleForm.label[item.key] = item.value
         })
-        // 将label存入deploymentStore
-        deploymentStore.setDeploymentAnnotations(ruleForm.label)
+        // 将label存入statefulsetStore
+        statefulsetStore.setstatefulsetAnnotations(ruleForm.label)
       }
-      // 如果当前激活的标签页是podTemplateLabel,则保存label到deployment.spec.template.metadata.labels
+      // 如果当前激活的标签页是podTemplateLabel,则保存label到statefulset.spec.template.metadata.labels
       else if (activeTabName.value === 'podTemplateLabel') {
         // 初始化label
-        deploymentStore.deleteDeploymentSelector()
+        statefulsetStore.deletestatefulsetSelector()
         ruleForm.label = {}
         // 将valuePairs转换成ruleForm.label
         ruleForm.valuePairs.forEach((item) => {
           ruleForm.label[item.key] = item.value
         })
-        // 将label存入deploymentStore
-        deploymentStore.setDeploymentSelector(ruleForm.label)
+        // 将label存入statefulsetStore
+        statefulsetStore.setstatefulsetSelector(ruleForm.label)
       }
-      // 如果当前激活的标签页是podTemplateAnnotation,则保存annotation到deployment.spec.template.metadata.annotations
+      // 如果当前激活的标签页是podTemplateAnnotation,则保存annotation到statefulset.spec.template.metadata.annotations
       else if (activeTabName.value === 'podTemplateAnnotation') {
         // 初始化annotation
-        deploymentStore.deleteDeploymentTemplateAnnotations()
+        statefulsetStore.deletestatefulsetTemplateAnnotations()
         ruleForm.label = {}
         // 将valuePairs转换成ruleForm.label
         ruleForm.valuePairs.forEach((item) => {
           ruleForm.label[item.key] = item.value
         })
-        // 将label存入deploymentStore
-        deploymentStore.setDeploymentTemplateAnnotations(ruleForm.label)
+        // 将label存入statefulsetStore
+        statefulsetStore.setstatefulsetTemplateAnnotations(ruleForm.label)
       }
 
 
@@ -203,7 +203,7 @@
       }
     ],
     
-    deploymentName: '',
+    statefulsetName: '',
     replicas: 1,
     dnsPolicy: 'ClusterFirst',
     hostNetwork: false,
@@ -214,7 +214,7 @@
     strategy: {
       type: 'RollingUpdate',
       rollingUpdate: {
-      maxSurge: '25%',
+      partition: 0,
       maxUnavailable: '25%',
       },
     },
@@ -222,7 +222,7 @@
     })
 
     const rules = reactive({
-    deploymentName: [
+    statefulsetName: [
         { required: true, message: 'Please input Activity name', trigger: 'blur' },
         // { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
     ],
@@ -233,23 +233,23 @@
   
     // 更新数据
     const updateData = () => {
-        console.log('保存了deployment数据');
+        console.log('保存了statefulset数据');
         
-        // 绑定deploymentName
-        deploymentStore.setDeploymentName(ruleForm.deploymentName)
+        // 绑定statefulsetName
+        statefulsetStore.setstatefulsetName(ruleForm.statefulsetName)
         
         // 绑定replicas
-        deploymentStore.setDeploymentReplicas(ruleForm.replicas)
+        statefulsetStore.setstatefulsetReplicas(ruleForm.replicas)
         // 绑定dnsPolicy
-        deploymentStore.setDeploymentDnsPolicy(ruleForm.dnsPolicy)
+        statefulsetStore.setstatefulsetDnsPolicy(ruleForm.dnsPolicy)
 
         // 绑定更新策略
         if (ruleForm.strategy.type === 'RollingUpdate') {
-          deploymentStore.setDeploymentStrategy(ruleForm.strategy)
+          statefulsetStore.setstatefulsetStrategy(ruleForm.strategy)
         }
         else {
-          deploymentStore.deleteDeploymentStrategy()
-          deploymentStore.setDeploymentStrategy({
+          statefulsetStore.deletestatefulsetStrategy()
+          statefulsetStore.setstatefulsetStrategy({
             
             type: ruleForm.strategy.type
           })
@@ -257,27 +257,27 @@
         
 
         // 绑定hostNetwork
-        deploymentStore.setDeploymentHostNetwork(ruleForm.hostNetwork)
+        statefulsetStore.setstatefulsetHostNetwork(ruleForm.hostNetwork)
 
         // 如果未启用标签编辑器,则自动创建注释和标签
         if (!ruleForm.showLabelEditer) {
           console.log('未启用标签编辑器,自动创建标签和注释');
           
           // 创建标签
-          deploymentStore.setDeploymentLabels({
-              app: ruleForm.deploymentName
+          statefulsetStore.setstatefulsetLabels({
+              app: ruleForm.statefulsetName
           })
           // 创建注释
-          deploymentStore.setDeploymentAnnotations({
-              app: ruleForm.deploymentName
+          statefulsetStore.setstatefulsetAnnotations({
+              app: ruleForm.statefulsetName
           })
           // 创建selector,同时设置template的label
-          deploymentStore.setDeploymentSelector({
-              app: ruleForm.deploymentName
+          statefulsetStore.setstatefulsetSelector({
+              app: ruleForm.statefulsetName
           })
           // 创建pod模板注释
-          deploymentStore.setDeploymentTemplateAnnotations({
-              app: ruleForm.deploymentName
+          statefulsetStore.setstatefulsetTemplateAnnotations({
+              app: ruleForm.statefulsetName
           }) 
         }
         // 启用标签编辑器,则使用编辑器中的标签和注释
@@ -290,7 +290,7 @@
     // 监听postdata.value.namespace的变化
     watchEffect(() => {
         console.log('postdata-namespace改变了',postData.value.namespace)
-        deploymentStore.setDeploymentNamespace(postData.value.namespace)
+        statefulsetStore.setstatefulsetNamespace(postData.value.namespace)
     })
 
   </script>

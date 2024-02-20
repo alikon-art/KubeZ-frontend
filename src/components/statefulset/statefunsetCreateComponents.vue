@@ -1,7 +1,7 @@
 <template>
     <clusterAndNamespaceSelecter></clusterAndNamespaceSelecter>
 
-    <deploymentCreateForm></deploymentCreateForm>
+    <statefulsetCreateForm></statefulsetCreateForm>
 
     <templateCreateForm></templateCreateForm>
     
@@ -42,14 +42,14 @@
     import {anyToYaml} from '../../utils/jsyaml/jsyaml.vue'
 
     // 导入表单组件
-    import deploymentCreateForm from './deploymentCreateForm.vue'
+    import statefulsetCreateForm from './statefulsetCreateForm.vue'
     import clusterAndNamespaceSelecter from '../viewComponents/clusterAndNamespaceSelecter.vue';
     import templateCreateForm from '../template/templateCreateForm.vue';
     
 
     // 导入pinia存储库
     import { UsePostStore } from "../../utils/pinia/postStore.vue";
-    import { useDeploymentStore } from "@/model/deploymentStore.vue";
+    import { usestatefulsetStore } from "@/model/statefulsetStore.vue";
     import { useTemplatetStore } from "@/model/templateStore.vue";
 
     // 导入通知组件
@@ -60,9 +60,9 @@
     const postStore  =  UsePostStore()
     const { postUrl,postData ,response,itemData,componentsStatus } = storeToRefs(postStore)
 
-    // 加载deployment存储库
-    const deploymentStore = useDeploymentStore()
-    const { deployment } = storeToRefs(deploymentStore)
+    // 加载statefulset存储库
+    const statefulsetStore = usestatefulsetStore()
+    const { statefulset } = storeToRefs(statefulsetStore)
 
     // 加载template存储库
     const templateStore = useTemplatetStore()
@@ -84,13 +84,13 @@
     // itemyaml.value = anyToYaml(containers.value)
 
 
-    // 添加容器到deployment
-    deploymentStore.deployment.spec.template = template.value
+    // 添加容器到statefulset
+    statefulsetStore.statefulset.spec.template = template.value
 
     
 
     // 添加deplotment到postdata
-    postStore.postData.item = deploymentStore.deployment
+    postStore.postData.item = statefulsetStore.statefulset
 
 
 
@@ -106,7 +106,7 @@
     }
     
     const create = () => {
-      postStore.postUrl = 'deployment/add'
+      postStore.postUrl = 'statefulset/add'
       postStore.SendQuerry()
       console.log(response.value);
       if (response.value.status === "200") {

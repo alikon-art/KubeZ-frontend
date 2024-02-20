@@ -10,7 +10,7 @@
         router="ture"
       >
 
-      <el-menu-item index="testpage">
+      <!-- <el-menu-item index="testpage">
         <el-icon><document /></el-icon>
         <span>testPage</span>
       </el-menu-item>  
@@ -21,7 +21,7 @@
       <el-menu-item index="listComponents">
         <el-icon><document /></el-icon>
         <span>listComponents</span>
-      </el-menu-item> 
+      </el-menu-item>  -->
 
       <!-- 仪表盘 -->
       <el-menu-item index="dashboard">
@@ -35,7 +35,7 @@
           <el-icon><document /></el-icon>
           <span>集群资源</span>
         </template>
-        <el-menu-item index="clusterManager">集群管理</el-menu-item>
+        <el-menu-item index="cluster">集群管理</el-menu-item>
         <el-menu-item index="node">Node</el-menu-item>
         <el-menu-item index="namespace">NameSpace</el-menu-item>
       </el-sub-menu>
@@ -50,7 +50,7 @@
         <el-menu-item index="deployment">Deployment</el-menu-item>
         <el-menu-item index="statefulSet">StatefulSet</el-menu-item>
         <el-menu-item index="daemonSet">DaemonSet</el-menu-item>
-        <el-menu-item index="cronJob">CronJob</el-menu-item>
+        <!-- <el-menu-item index="cronJob">CronJob</el-menu-item> -->
       </el-sub-menu>
 
       <!-- 服务发布资源 -->
@@ -61,7 +61,7 @@
         </template>
         <el-menu-item index="service">Service</el-menu-item>
         <el-menu-item index="ingress">Ingress</el-menu-item>
-        <el-menu-item index="endpoints">Endpoints</el-menu-item>
+        <!-- <el-menu-item index="endpoints">Endpoints</el-menu-item> -->
       </el-sub-menu>
 
       <!-- 配置和存储资源 -->

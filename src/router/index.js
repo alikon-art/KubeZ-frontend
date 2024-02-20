@@ -40,9 +40,9 @@ const router = createRouter({
       component: () => import('../testPage.vue')
     },
     {
-      path: '/clusterManager',
-      name: 'clusterManager',
-      component: () => import('../views/clusterResources/clusterManager.vue')
+      path: '/cluster',
+      name: 'cluster',
+      component: () => import('../views/clusterResources/cluster.vue')
     },
     {
       path: '/Node',
@@ -70,9 +70,29 @@ const router = createRouter({
       component: () => import('../views/workload/statefulSet.vue')
     },
     {
+      path: '/statefulsetCreateComponents',
+      name: 'statefulsetCreateComponents',
+      component: () => import('../components/statefulset/statefunsetCreateComponents.vue')
+    },
+    {
+      path: '/statefulsetDetailsComponents',
+      name: 'statefulsetDetailsComponents',
+      component: () => import('../components/statefulset/statefulsetDetailsComponents.vue')
+    },
+    {
       path: '/DaemonSet',
       name: 'daemonSet',
       component: () => import('../views/workload/daemonSet.vue')
+    },
+    {
+      path: '/daemonSetCreateComponents',
+      name: 'daemonSetCreateComponents',
+      component: () => import('../components/daemonSet/daemonSetCreateComponents.vue')
+    },
+    {
+      path: '/daemonSetDetailsComponents',
+      name: 'daemonSetDetailsComponents',
+      component: () => import('../components/daemonSet/daemonSetDetailsComponents.vue')
     },
     {
       path: '/CronJob',
@@ -83,6 +103,16 @@ const router = createRouter({
       path: '/Service',
       name: 'service',
       component: () => import('../views/service/service.vue')
+    },
+    {
+      path: '/serviceCreateComponents',
+      name: 'serviceCreateComponents',
+      component: () => import('../components/service/serviceCreateComponents.vue')
+    },
+    {
+      path: '/serviceDetailsComponents',
+      name: 'serviceDetailsComponents',
+      component: () => import('../components/service/serviceDetailsComponents.vue')
     },
     {
       path: '/Ingress',
