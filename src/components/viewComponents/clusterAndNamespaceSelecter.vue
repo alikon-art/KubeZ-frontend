@@ -62,8 +62,10 @@ const showCreate = ref(false)
 // 如果当前url中包含Components则不显示创建按钮
 if (currentUrl.value.includes('Components')) {
     showCreate.value = false
-} else {
-    showCreate.value = true
+} 
+// 如果当前url包含了pod也不显示创建按钮
+if (currentUrl.value.includes('pod')) {
+    showCreate.value = false
 }
 
 
