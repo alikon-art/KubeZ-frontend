@@ -2,10 +2,11 @@
   <el-container>
     <el-header >
       <el-menu mode="horizontal" default-active="item1">
-        <el-menu-item index="item1">已选内容</el-menu-item>
-        <el-menu-item index="item2">菜单内容一</el-menu-item>
-        <el-menu-item index="item3">菜单内容二</el-menu-item>
-        <el-menu-item index="item4" :disabled="true">菜单内容三</el-menu-item>
+        <el-menu-item index="item1">
+          <!-- <el-image src="../../assets/kubez-logo.png" :fit="fit"></el-image> -->
+          <!-- <img src="../../assets/kubez-logo.png" alt="kubez-logo" style=" height: 50px;"> -->
+          <span style="font-size: 18px;">KubeZ</span>
+        </el-menu-item>
       </el-menu>
     </el-header>
 

@@ -83,6 +83,7 @@ const logProps = () => {
 // 将props.labels中的对象转换为键值对数组,添加到valuePairs中的函数
 // 会将app:nginx转换为{key: 'app', value: 'nginx'}形式
 const convertLabelsToValuePairs = () => {
+    valuePairs.value = [];
     console.log('转换前的labels',props.labels);
     if (props.labels && typeof props.labels === 'object') {
       for (let labelKey in props.labels) {

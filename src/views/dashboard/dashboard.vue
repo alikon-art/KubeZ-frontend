@@ -1,5 +1,5 @@
 <template>
-    <p>this is dashboard page</p>
+    <p>现在还没有仪表盘,到别处看看吧</p>
 
 </template>
 

@@ -45,6 +45,16 @@ const router = createRouter({
       component: () => import('../views/clusterResources/cluster.vue')
     },
     {
+      path: '/clusterDetailsComponents',
+      name: 'clusterDetailsComponents',
+      component: () => import('../components/cluster/clusterDetailsComponents.vue')
+    },
+    {
+      path: '/clusterCreateComponents',
+      name: 'clusterCreateComponents',
+      component: () => import('../components/cluster/clusterCreateComponents.vue')
+    },
+    {
       path: '/Node',
       name: 'node',
       component: () => import('../views/clusterResources/node.vue')

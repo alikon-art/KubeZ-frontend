@@ -1,7 +1,7 @@
 <script >
 import { defineStore } from 'pinia';
 
-const useSecretStore = defineStore('secret',{
+const useClusterStore = defineStore('secret',{
   
     state: () => ({
     secret: {
@@ -9,12 +9,19 @@ const useSecretStore = defineStore('secret',{
         kind: 'Secret',
         metadata: {
             name: '',
-            labels: {},
+            labels: {
+                app: 'kubez'
+            },
             annotations: {},
             namespace: 'default',
         },
         stringData: {
-           
+            annotations: '',
+            clusterconfig: '',
+            clusterid: '',
+            clustername: '',
+            version: '',
+
         },
         type: 'Opaque',
     },
@@ -69,6 +76,6 @@ const useSecretStore = defineStore('secret',{
 })
 
 
-export { useSecretStore }
+export { useClusterStore }
 
 </script>
