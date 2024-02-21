@@ -34,6 +34,13 @@
       </template>
   </el-table-column>
 
+    <el-table-column prop="item.status.phase" label="状态" v-if="isPod" />
+    <el-table-column prop="item.status.phase" label="状态" v-if="isDeployment" >
+      <template #default="scope">
+        <el-tag  >{{scope.row.item.status.replicas-scope.row.item.status.unavailableReplicas  }} / {{ scope.row.item.status.replicas }}</el-tag>
+      </template>
+      </el-table-column>
+
     <el-table-column prop="createtime" label="创建时间" v-if="showCreateTime" />
 
 
@@ -88,6 +95,19 @@ if (currentUrl.value === 'cluster') {
 } else {
   isCluster.value = false
 }
+
+const isPod = ref(false)
+if (currentUrl.value === 'pod') {
+  isPod.value = true
+}
+
+const isDeployment = ref(false)
+if (currentUrl.value === 'deployment') {
+  isDeployment.value = true
+}
+
+
+
 
 const showName = ref(true)
 if (  currentUrl.value === 'cluster' || currentUrl.value === 'node') {

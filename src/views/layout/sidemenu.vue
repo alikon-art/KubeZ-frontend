@@ -60,7 +60,7 @@
           <span>服务发布资源</span>
         </template>
         <el-menu-item index="service">Service</el-menu-item>
-        <el-menu-item index="ingress">Ingress</el-menu-item>
+        <!-- <el-menu-item index="ingress">Ingress</el-menu-item> -->
         <!-- <el-menu-item index="endpoints">Endpoints</el-menu-item> -->
       </el-sub-menu>
 
@@ -72,8 +72,8 @@
         </template>
         <el-menu-item index="configMap">ConfigMap</el-menu-item>
         <el-menu-item index="secret">Secret</el-menu-item>
-        <el-menu-item index="pv">PV</el-menu-item>
-        <el-menu-item index="pvc">PVC</el-menu-item>
+        <!-- <el-menu-item index="pv">PV</el-menu-item>
+        <el-menu-item index="pvc">PVC</el-menu-item> -->
       </el-sub-menu>
 
       </el-menu>
