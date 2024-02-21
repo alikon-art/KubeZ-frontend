@@ -130,9 +130,30 @@ const router = createRouter({
       component: () => import('../views/configStorage/configMap.vue')
     },
     {
+      path: '/configMapCreateComponents',
+      name: 'configMapCreateComponents',
+      component: () => import('../components/configMap/configMapCreateComponents.vue')
+    },
+    {
+      path: '/configMapDetailsComponents',
+      name: 'configMapDetailsComponents',
+      component: () => import('../components/configMap/configMapDetailsComponents.vue')
+    },
+    {
       path: '/Secret',
       name: 'secret',
       component: () => import('../views/configStorage/secret.vue')
+    },
+    {
+      path: '/secretCreateComponents',
+      name: 'secretCreateComponents',
+      component: () => import('../components/secret/secretCreateComponents.vue')
+
+    },
+    {
+      path: '/secretDetailsComponents',
+      name: 'secretDetailsComponents',
+      component: () => import('../components/secret/secretDetailsComponents.vue')
     },
     {
       path: '/PV',
