@@ -1,10 +1,6 @@
 <template>
 
-    <basicInfo></basicInfo>
-    <status></status>
-    <deploymentInfoCard></deploymentInfoCard>
-    <containersInfo  :containers="itemData.spec?.template?.spec?.containers"></containersInfo>
-    <volumeInfo :volumes="itemData.spec?.template?.spec?.volumes"  ></volumeInfo>
+    building...
     
 
 
@@ -12,7 +8,7 @@
 </template>
 
 
-<script setup>
+<!-- <script setup>
 
 
     import { storeToRefs } from "pinia";
@@ -61,14 +57,4 @@
 
 
 </script>
-
-<style>
-.el-row {
-  margin-bottom: 20px;
-  
-}
-.el-col {
-  border-radius: 4px;
-}
-
-</style>
+ -->

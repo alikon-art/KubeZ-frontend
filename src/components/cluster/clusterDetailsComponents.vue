@@ -20,7 +20,7 @@
 
     import basicInfo from "../cardsComponents/basicInfo.vue"
     import status from "../cardsComponents/status.vue"
-    import secretInfoCard from "./secretInfoCard.vue"
+    import secretInfoCard from "./clusterInfoCard.vue"
 
     
     import { UsePostStore } from "../../utils/pinia/postStore.vue";

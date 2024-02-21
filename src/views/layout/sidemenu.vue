@@ -2,7 +2,7 @@
   <el-row class="tac">
     <el-col :span="24">
       <el-menu
-        default-active="testpage"
+        default-active="dashboard"
         unique-opened="true"
         class="el-menu-vertical-demo"
         @open="handleOpen"
