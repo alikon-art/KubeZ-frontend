@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubez-frontend
+  labels:
+    app: kubez-frontend
+  annotations:
+    app: kubez-frontend
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: kubez-frontend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kubez-frontend
+      annotations:
+        app: kubez-frontend
+    spec:
+      affinity:
+        podAntiAffinity: {}
+      restartPolicy: Always
+      imagePullSecrets: []
+      dnsPolicy: ClusterFirst
+      hostNetwork: false
+      volumes: []
+      containers:
+        - name: kubez_frontend
+          image: reactive0/kubez_frontend:0.0.1
+          tty: false
+          workingDir: ''
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: 1024Mi
+              cpu: 1
+            requests:
+              memory: 128Mi
+              cpu: 100m
+          ports:
+            - name: kubez-frontend
+              containerPort: 80
+              protocol: TCP
+          lifecycle: {}
+          volumeMounts: []
+          env: []
+          envFrom: []
+      initContainers: []
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+---
