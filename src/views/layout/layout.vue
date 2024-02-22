@@ -21,7 +21,7 @@
             <router-view></router-view>
           </div>
         </el-main>
-        <el-footer>Copyright @ 2019-{{ new Date().getFullYear() }} Tencent. All Rights Reserved</el-footer>
+        <el-footer>Copyright @ 2019-{{ new Date().getFullYear() }} 915149091. All Rights Reserved</el-footer>
       </el-container>
     </el-container>
   </el-container>

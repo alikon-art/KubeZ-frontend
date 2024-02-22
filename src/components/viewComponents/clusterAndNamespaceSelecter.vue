@@ -57,7 +57,7 @@ const route = useRoute()
 // 获取不带/的当前url
 const currentUrl = ref(route.path.replace('/',''))
 
-const showCreate = ref(false)
+const showCreate = ref(true)
 
 // 如果当前url中包含Components则不显示创建按钮
 if (currentUrl.value.includes('Components')) {

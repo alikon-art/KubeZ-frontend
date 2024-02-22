@@ -27,7 +27,7 @@ spec:
       hostNetwork: false
       volumes: []
       containers:
-        - name: kubez_frontend
+        - name: kubez-frontend
           image: reactive0/kubez_frontend:0.0.1
           tty: false
           workingDir: ''
@@ -54,3 +54,20 @@ spec:
       maxSurge: 25%
       maxUnavailable: 25%
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubez-frontend
+  namespace: default
+  labels:
+    app: kubez-frontend
+spec:
+  ports:
+    - name: kubez-frontend
+      protocol: TCP
+      port: 80
+      targetPort: 80
+  selector:
+    app: kubez-frontend
+  type: NodePort
+  sessionAffinity: None
