@@ -79,3 +79,4 @@ const useClusterStore = defineStore('secret',{
 export { useClusterStore }
 
 </script>
+./clusterstore.vue

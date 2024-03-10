@@ -136,4 +136,4 @@
 
 
   </script>
-  
+  @/model/clusterstore.vue
