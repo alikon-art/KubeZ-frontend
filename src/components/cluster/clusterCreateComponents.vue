@@ -46,7 +46,7 @@
 
     // 导入pinia存储库
     import { UsePostStore } from "../../utils/pinia/postStore.vue";
-    import { useClusterStore } from "@/model/clusterStore.vue";
+    import { useClusterStore } from "@/model/clusterstore.vue";
 
     // 导入通知组件
     import { Notification } from "@/utils/elements/notification.vue"
