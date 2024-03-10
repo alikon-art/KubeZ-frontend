@@ -10,4 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - run: echo ${{ secrets.DOCKER_PASSWORD }}    
+      - run: echo ${{ secrets.DOCKER_PASSWORD }} >> test
+
+      - run: cat test
