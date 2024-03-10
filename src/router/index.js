@@ -147,12 +147,12 @@ const router = createRouter({
     {
       path: '/configMapCreateComponents',
       name: 'configMapCreateComponents',
-      component: () => import('../components/configmap/configMapCreateComponents.vue')
+      component: () => import('../components/configmap/configmapCreateComponents.vue')
     },
     {
       path: '/configMapDetailsComponents',
       name: 'configMapDetailsComponents',
-      component: () => import('../components/configmap/configMapDetailsComponents.vue')
+      component: () => import('../components/configmap/configmapDetailsComponents.vue')
     },
     {
       path: '/Secret',
