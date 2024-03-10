@@ -11,6 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - run: ls -al
+
+      - run: ls -al src/model
+
       - name: Setup nodejs
         uses: actions/setup-node@v4
         with:
