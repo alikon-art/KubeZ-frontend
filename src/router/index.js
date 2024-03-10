@@ -10,6 +10,11 @@ const router = createRouter({
       component: () => import('../components/listComponents.vue')
     },
     {
+      path: '/login',
+      name: 'login',
+      component: () => import('../components/auth/login.vue')
+    },
+    {
       path: '/podDetailsComponents',
       name: 'podDetailsComponents',
       component: () => import('../components/pod/podDetailsComponents.vue')

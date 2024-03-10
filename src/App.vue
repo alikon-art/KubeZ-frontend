@@ -10,3 +10,6 @@
 // import { RouterLink, RouterView } from 'vue-router'
 import layout from './views/layout/layout.vue'
 </script>
+
+<style>
+</style>

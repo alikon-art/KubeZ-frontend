@@ -64,7 +64,7 @@ if (currentUrl.value.includes('Components')) {
     showCreate.value = false
 } 
 // 如果当前url包含了pod也不显示创建按钮
-if (currentUrl.value.includes('pod')) {
+if (currentUrl.value.includes('pod')||currentUrl.value.includes('namespace')||currentUrl.value.includes('node')) {
     showCreate.value = false
 }
 

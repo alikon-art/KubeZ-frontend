@@ -9,6 +9,8 @@
     // 发送post请求需要的数据
     const UsePostStore = defineStore('postStore', {
     state: () => ({ 
+        token: '',
+
         // post传入的参数
         postData: {
             clusterid:'cluster1',
