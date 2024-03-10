@@ -98,7 +98,7 @@ const saveValuePairsToLabels = () => {
     props.labels = {};
     valuePairs.value.forEach((pair) => {
         // 判断是否为空
-        if (pair.key != '' && pair.value != '') {
+        if (pair.key != '' ) {
             props.labels[pair.key] = pair.value;
         }
     });
