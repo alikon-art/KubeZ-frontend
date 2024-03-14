@@ -9,18 +9,26 @@
 
     <!-- node类 -->
     <el-table-column prop="metadata.name" label="Node名称" v-if="isNode" /> 
-    <el-table-column prop="status.conditions[4].status" label="状态" v-if="isNode" >
-      <template #default="scope">
-        <el-tag v-if="scope.row.status.conditions[4].status === 'True'" type="success">Ready</el-tag>
-        <el-tag v-else type="danger">NotReady</el-tag>
+    <el-table-column prop="status?.conditions[4]?.status" label="状态" v-if="isNode" >
+      <template #default="scope" >
+        <div v-if="scope.row.status?.conditions[4]?.type == 'Ready'">
+        <el-tag v-if="scope.row.status?.conditions[4]?.status === 'True'  " type="success">Ready</el-tag>
+        <el-tag v-if="scope.row.status?.conditions[4]?.status === 'False'" type="danger">NotReady</el-tag>
+        <el-tag v-if="scope.row.status?.conditions[4]?.status === 'Unknown' " type="info">Unknow</el-tag>
+        </div>
+        <div v-if="scope.row.status?.conditions[3]?.type == 'Ready'">
+        <el-tag v-if="scope.row.status?.conditions[3]?.status === 'True'  " type="success">Ready</el-tag>
+        <el-tag v-if="scope.row.status?.conditions[3]?.status === 'False'" type="danger">NotReady</el-tag>
+        <el-tag v-if="scope.row.status?.conditions[3]?.status === 'Unknown' " type="info">Unknow</el-tag>
+        </div>
       </template>
     </el-table-column>
+
     <el-table-column prop="status.nodeInfo.osImage" label="操作系统" v-if="isNode" />
     <el-table-column prop="status.nodeInfo.kubeletVersion" label="kubelet版本" v-if="isNode" />
     <el-table-column prop="status.nodeInfo.containerRuntimeVersion" label="容器运行时版本" v-if="isNode" />
     <el-table-column prop="status.nodeInfo.architecture" label="架构" v-if="isNode" />
     <el-table-column prop="status.conditions[4].lastHeartbeatTime" label="上次就绪时间" v-if="isNode" />
-
 
     <!-- 非集群类 -->
     <el-table-column prop="name" label="名称" v-if="showName" />
