@@ -8,8 +8,8 @@
 
   // 基本配置
   const axiosInstance = axios.create({
-      baseURL: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}/api/`,
-    //   baseURL: `http://127.0.0.1:8080/api/`,
+    //   baseURL: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}/api/`,
+      baseURL: `http://127.0.0.1:8080/api/`,
       headers: {
           'Content-Type': 'application/json'
       }

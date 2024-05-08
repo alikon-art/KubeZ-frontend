@@ -65,9 +65,24 @@ const router = createRouter({
       component: () => import('../views/clusterResources/node.vue')
     },
     {
+      path: '/nodeDetailsComponents',
+      name: 'nodeDetailsComponents',
+      component: () => import('../components/node/nodeDetailsComponents.vue')
+    },
+    {
       path: '/nameSpace',
       name: 'nameSpace',
       component: () => import('../views/clusterResources/nameSpace.vue')
+    },
+    {
+      path: '/namespaceDetailsComponents',
+      name: 'namespaceDetailsComponents',
+      component: () => import('../components/namespace/namespaceDetailsComponents.vue')
+    },
+    {
+      path: '/namespaceCreateComponents',
+      name: 'namespaceCreateComponents',
+      component: () => import('../components/namespace/namespaceCreateComponents.vue')
     },
     {
       path: '/Pod',

@@ -52,13 +52,13 @@
     <el-table-column prop="createtime" label="创建时间" v-if="showCreateTime" />
 
 
-    <el-table-column prop="operactions" label="操作" >
+    <el-table-column prop="operactions" label="操作" v-if="showOperation">
       <!-- 按钮插槽 -->
       <template #default="scope">
-        <el-button @click="showItemInfo(scope.row)" v-if="currentUrl != 'cluster'" >详情</el-button>
-        <el-button @click="deleteItem(scope.row)" type="danger" size="small" >删除</el-button>
+        <el-button @click="showItemInfo(scope.row)"  >详情</el-button>
+        <el-button @click="deleteItem(scope.row)" type="danger" size="small" v-if="showDelete">删除</el-button>
       </template>
-
+ 
     </el-table-column>
   </el-table>
   <!-- <button @click="log">log</button> -->
@@ -116,7 +116,7 @@ if (currentUrl.value === 'deployment') {
 
 
 
-
+// 控制菜单显示项  
 const showName = ref(true)
 if (  currentUrl.value === 'cluster' || currentUrl.value === 'node') {
   showName.value = false
@@ -130,6 +130,16 @@ if (currentUrl.value === 'namespace' || currentUrl.value === 'cluster' || curren
 const showCreateTime = ref(true)
 if (currentUrl.value === 'node') {
   showCreateTime.value = false
+}
+
+const showOperation = ref(true)
+// if (currentUrl.value === 'cluster') {
+//   showOperation.value = false
+// }
+
+const showDelete = ref(true)
+if (currentUrl.value === 'node' || currentUrl.value === 'cluster' ) {
+  showDelete.value = false
 }
 
 // 当前为node
@@ -162,20 +172,29 @@ function log (){
 }
 
 const showItemInfo = (row) =>{
-  console.log('row',row,row.name);
-  // postData.value.name = row.name
-  // postData.value.namespace = row.namespace
-  // console.log('postdata',postData.value);
-  // router.push({path:'detailsComponents',query:{userid:'123'}})
+  console.log('row',row);
+  let itemName = ''
+  let itemNameSpace = ''
+  if (currentUrl.value === 'node') {
+    itemName = row.metadata.name
+  }else if (currentUrl.value === 'cluster'){
+    itemName = row.clusterid
+    itemNameSpace = 'kubez'
+  }
+  else  {
+    itemName = row.name
+    itemNameSpace = row.namespace
+  }
   router.push({
     path:currentUrl.value+'DetailsComponents',
     query:{
       // clusterid:row.clusterid,
-      namespace:row.namespace,
-      name:row.name,
+      namespace:itemNameSpace,
+      name:itemName,
     }
   })
 }
+
 
 
 const deleteItem = (row) =>{

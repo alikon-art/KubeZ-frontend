@@ -9,8 +9,8 @@
         </el-menu-item>
         <div class="flex-grow" />
         
-        <el-button type="success" style="margin: 15px;" size="small" @click="login">登录</el-button>
-        <el-button type="danger" style="margin: 15px;" size="small" @click="logout" >退出</el-button>
+        <el-button type="success" style="margin: 15px;"  @click="login">登录</el-button>
+        <el-button type="danger" style="margin: 15px;"  @click="logout" >退出</el-button>
 
 
       </el-menu>
@@ -27,7 +27,7 @@
             <router-view></router-view>
           </div>
         </el-main>
-        <el-footer>Copyright @ 2019-{{ new Date().getFullYear() }} 915149091. All Rights Reserved</el-footer>
+        <!-- <el-footer>915149091</el-footer> -->
       </el-container>
     </el-container>
   </el-container>

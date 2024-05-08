@@ -2,7 +2,7 @@
   <el-row class="tac">
     <el-col :span="24">
       <el-menu
-        default-active="dashboard"
+        default-active="clusterResources"
         unique-opened="true"
         class="el-menu-vertical-demo"
         @open="handleOpen"
@@ -24,10 +24,10 @@
       </el-menu-item>  -->
 
       <!-- 仪表盘 -->
-      <el-menu-item index="dashboard">
+      <!-- <el-menu-item index="dashboard">
         <el-icon><document /></el-icon>
         <span>仪表盘</span>
-      </el-menu-item>
+      </el-menu-item> -->
 
       <!-- 集群资源 -->
       <el-sub-menu index="clusterResources">
